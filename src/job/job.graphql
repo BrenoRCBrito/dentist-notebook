@@ -1,0 +1,24 @@
+type Job {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input CreateJobInput {
+  # Example field (placeholder)
+  exampleField: Int
+}
+
+input UpdateJobInput {
+  id: Int!
+}
+
+type Query {
+  job: [Job]!
+  job(id: Int!): Job
+}
+
+type Mutation {
+  createJob(createJobInput: CreateJobInput!): Job!
+  updateJob(updateJobInput: UpdateJobInput!): Job!
+  removeJob(id: Int!): Job
+}
