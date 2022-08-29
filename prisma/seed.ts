@@ -1,12 +1,11 @@
-import PrismaRefresh from './prismaRefresh';
-
 import doctors = require('./seeds/doctors.json');
 import clients = require('./seeds/clients.json');
 import jobTypes = require('./seeds/jobTypes.json');
 import jobs = require('./seeds/jobs.json');
 import payments = require('./seeds/payments.json');
+import { PrismaClient } from '@prisma/client';
 
-const prisma = PrismaRefresh;
+const prisma = new PrismaClient();
 
 async function createDoctors() {
   await prisma.doctor.create({
