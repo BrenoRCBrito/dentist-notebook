@@ -1,0 +1,61 @@
+scalar Client
+scalar Payment
+scalar Job
+scalar Group
+scalar GroupInvites
+
+enum Role {
+  ADMIN
+  ASSOCIATE
+}
+
+enum PaymentMethod {
+  CASH
+  PIX
+  CREDIT
+  DEBIT
+  PLAN
+}
+
+enum InviteStatus {
+  ACCEPTED
+  REJECTED
+  WAITING
+}
+
+type Doctor {
+  id: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  name: String!
+  lastName: String!
+  role: Role!
+  clients: [Client]
+  jobs: [Job]
+  groups: [Group]
+  payments: [Payment]
+  invites: [GroupInvites]
+}
+
+input CreateDoctorInput {
+  name: String!
+  lastName: String!
+  role: Role!
+}
+
+input UpdateDoctorInput {
+  name: String!
+  lastName: String!
+  role: Role!
+}
+
+type Query {
+  doctor: [Doctor!]
+  doctor(id: Int!): Doctor
+}
+
+type Mutation {
+  createDoctor(createDoctorInput: CreateDoctorInput!): Doctor!
+  updateDoctor(updateDoctorInput: UpdateDoctorInput!): Doctor!
+  removeDoctor(id: Int!): Doctor
+}
