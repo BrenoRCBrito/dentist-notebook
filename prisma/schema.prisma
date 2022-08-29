@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  ASSOCIATE
+}
+
+enum PaymentMethod {
+  CASH
+  PIX
+  CREDIT
+  DEBIT
+  PLAN
+}
+
+enum InviteStatus {
+  ACCEPTED
+  REJECTED
+  WAITING
+}
+
+model Group {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  adminId   String
+  doctors   Doctor[]
+}
+
+model Doctor {
+  id        String        @id @default(uuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  name      String
+  lastName  String
+  role      Role          @default(ASSOCIATE)
+  clients   Client[]
+  jobs      Job[]
+  groups    Group[]
+  payments  Payment[]
+  invites   GroupInvite[]
+}
+
+model GroupInvite {
+  id        String       @id @default(uuid())
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  status    InviteStatus @default(WAITING)
+  groupId   String
+  Doctor    Doctor?      @relation(fields: [doctorId], references: [id])
+  doctorId  String?
+}
+
+model Client {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  name      String
+  lastName  String
+  payments  Payment[]
+  jobs      Job[]
+  doctors   Doctor[]
+}
+
+model Job {
+  id                    String    @id @default(uuid())
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  notes                 String?
+  numberOfInstallment   Float     @default(1)
+  installmentValue      Float     @default(1)
+  paidValue             Float     @default(0)
+  remainingInstallments Float     @default(1)
+  discount              Float     @default(0)
+  Payment               Payment[]
+  JobType               JobType   @relation(fields: [jobTypeId], references: [id])
+  jobTypeId             String
+  Doctor                Doctor?   @relation(fields: [doctorId], references: [id])
+  doctorId              String?
+  Client                Client?   @relation(fields: [clientId], references: [id])
+  clientId              String?
+}
+
+model JobType {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  value     Float    @default(1)
+  job       Job[]
+}
+
+model Payment {
+  id        String        @id @default(uuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  method    PaymentMethod @default(CASH)
+  value     Float         @default(1)
+  Job       Job           @relation(fields: [jobId], references: [id])
+  jobId     String
+  Client    Client?       @relation(fields: [clientId], references: [id])
+  clientId  String?
+  Doctor    Doctor?       @relation(fields: [doctorId], references: [id])
+  doctorId  String?
+}

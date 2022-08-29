@@ -1,0 +1,17 @@
+[
+  {
+    "id": "1ad1fccc-d279-46a0-8980-1d91afd6ba67",
+    "name": "Manutenção de aparelho",
+    "value": 50
+  },
+  {
+    "id": "5108babc-bf35-44d5-a9ba-de08badfa80a",
+    "name": "Montagem de aparelho comum",
+    "value": 400
+  },
+  {
+    "id": "2d790a4d-7c9c-4e23-9c9c-5749c5fa7fdb",
+    "name": "Montagem de aparelho estético",
+    "value": 600
+  }
+]
