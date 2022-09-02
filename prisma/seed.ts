@@ -3,50 +3,66 @@ import clients = require('./seeds/clients.json');
 import jobTypes = require('./seeds/jobTypes.json');
 import jobs = require('./seeds/jobs.json');
 import payments = require('./seeds/payments.json');
+import paymentMethods = require('./seeds/paymentMethods.json');
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function createDoctors() {
+async function createGroup() {
   await prisma.doctor.create({
     data: {
-      id: 'a242decb-e589-4ecb-be7d-b7ff6f20ade5',
       name: 'Ana',
       lastName: 'Martins',
-      role: 'ADMIN',
+      email: 'anamartins@algo.com',
+      password: 'anamartins',
     },
   });
 
-  await prisma.doctor.createMany({
-    data: doctors,
-    skipDuplicates: true,
-  });
-}
-
-async function createGroup() {
   await prisma.group.create({
     data: {
-      id: '10faad0e-2714-11ed-a261-0242ac120002',
-      adminId: 'a242decb-e589-4ecb-be7d-b7ff6f20ade5',
+      adminId: 1,
       name: 'Clínica Sorriso',
     },
   });
+
+  await prisma.doctor.update({
+    where: { id: 1 },
+    data: {
+      groups: { connect: { id: 1 } },
+      managedGroups: { connect: { id: 1 } },
+    },
+  });
+}
+
+async function createDoctors() {
+  for (const doctor of doctors) {
+    await prisma.doctor.create({
+      data: doctor,
+    });
+  }
 }
 
 async function createGroupInvites() {
   await prisma.groupInvite.create({
     data: {
-      doctorId: 'af7c1fe6-d669-414e-b066-e9733f0de7a8',
-      groupId: '10faad0e-2714-11ed-a261-0242ac120002',
+      doctorId: 2,
+      groupId: 1,
+      message: 'Convite',
     },
   });
 }
 
-async function createClients() {
-  await prisma.client.createMany({
-    data: clients,
+async function createPaymentMethods() {
+  await prisma.paymentMethod.createMany({
+    data: paymentMethods,
     skipDuplicates: true,
   });
+}
+
+async function createClients() {
+  for (const client of clients) {
+    await prisma.client.create({ data: client });
+  }
 }
 
 async function createJobTypes() {
@@ -71,9 +87,10 @@ async function createPayments() {
 }
 
 async function main() {
-  await createDoctors();
   await createGroup();
+  await createDoctors();
   await createGroupInvites();
+  await createPaymentMethods();
   await createClients();
   await createJobTypes();
   await createJob();

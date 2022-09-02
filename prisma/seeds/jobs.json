@@ -1,23 +1,28 @@
 [
   {
-    "id": "0a7d6250-0be5-4036-8f23-33dc1762bed0",
-    "notes": "Aparelho Rosa",
-    "jobTypeId": "5108babc-bf35-44d5-a9ba-de08badfa80a",
-    "doctorId": "af7c1fe6-d669-414e-b066-e9733f0de7a8",
-    "clientId": "8304e5ff-6324-4863-ac51-8fcbc6812b13"
-  },
-  {
-    "id": "72d334b3-af8c-469f-912c-e1818b10a73b",
     "notes": "Segunda manuntenção",
-    "jobTypeId": "1ad1fccc-d279-46a0-8980-1d91afd6ba67",
-    "doctorId": "08c71152-c552-42e7-b094-f510ff44e9cb",
-    "clientId": "fd4a096f-93f5-4f2a-86c6-69a2d20365ff"
+    "installmentValue": 50,
+    "jobTypeId": 1,
+    "doctorId": 2,
+    "clientId": 1,
+    "groupId": 1
   },
   {
-    "id": "ca52a95c-8bb4-4a9f-a0cf-f0df437592da",
+    "notes": "Aparelho Rosa",
+    "installmentsNumber": 4,
+    "installmentValue": 100,
+    "jobTypeId": 2,
+    "doctorId": 1,
+    "clientId": 1,
+    "groupId": 1
+  },
+  {
     "notes": "",
-    "jobTypeId": "2d790a4d-7c9c-4e23-9c9c-5749c5fa7fdb",
-    "doctorId": "c558a80a-f319-4c10-95d4-4282ef745b4b",
-    "clientId": "96fdc209-0551-4d67-b9ad-0e9067a44bc4"
+    "installmentsNumber": 4,
+    "installmentValue": 150,
+    "jobTypeId": 4,
+    "doctorId": 2,
+    "clientId": 2,
+    "groupId": null
   }
 ]
