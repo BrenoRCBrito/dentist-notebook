@@ -10,19 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  ADMIN
-  ASSOCIATE
-}
-
-enum PaymentMethod {
-  CASH
-  PIX
-  CREDIT
-  DEBIT
-  PLAN
-}
-
 enum InviteStatus {
   ACCEPTED
   REJECTED
@@ -30,87 +17,122 @@ enum InviteStatus {
 }
 
 model Group {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  name      String
-  adminId   String
-  doctors   Doctor[]
+  id             Int             @id @default(autoincrement())
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  name           String
+  admin          Doctor          @relation(name: "admin", fields: [adminId], references: [id])
+  adminId        Int             @unique
+  doctors        Doctor[]        @relation(name: "members")
+  clients        Client[]
+  jobs           Job[]
+  paymentMethods PaymentMethod[]
+  payments       Payment[]
+  jobTypes       JobType[]
+  invites        GroupInvite[]
 }
 
 model Doctor {
-  id        String        @id @default(uuid())
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  name      String
-  lastName  String
-  role      Role          @default(ASSOCIATE)
-  clients   Client[]
-  jobs      Job[]
-  groups    Group[]
-  payments  Payment[]
-  invites   GroupInvite[]
+  id             Int             @id @default(autoincrement())
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  name           String
+  lastName       String
+  email          String
+  password       String
+  groups         Group[]         @relation(name: "members")
+  managedGroups  Group[]         @relation(name: "admin")
+  clients        Client[]
+  jobs           Job[]
+  paymentMethods PaymentMethod[]
+  payments       Payment[]
+  jobTypes       JobType[]
+  groupInvites   GroupInvite[]
 }
 
 model GroupInvite {
-  id        String       @id @default(uuid())
+  id        Int          @id @default(autoincrement())
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
+  message   String
   status    InviteStatus @default(WAITING)
-  groupId   String
-  Doctor    Doctor?      @relation(fields: [doctorId], references: [id])
-  doctorId  String?
+  group     Group?       @relation(fields: [groupId], references: [id])
+  groupId   Int?
+  doctor    Doctor?      @relation(fields: [doctorId], references: [id])
+  doctorId  Int?
 }
 
 model Client {
-  id        String    @id @default(uuid())
+  id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   name      String
   lastName  String
-  payments  Payment[]
-  jobs      Job[]
+  groups    Group[]
   doctors   Doctor[]
+  jobs      Job[]
+  payments  Payment[]
 }
 
-model Job {
-  id                    String    @id @default(uuid())
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
-  notes                 String?
-  numberOfInstallment   Float     @default(1)
-  installmentValue      Float     @default(1)
-  paidValue             Float     @default(0)
-  remainingInstallments Float     @default(1)
-  discount              Float     @default(0)
-  Payment               Payment[]
-  JobType               JobType   @relation(fields: [jobTypeId], references: [id])
-  jobTypeId             String
-  Doctor                Doctor?   @relation(fields: [doctorId], references: [id])
-  doctorId              String?
-  Client                Client?   @relation(fields: [clientId], references: [id])
-  clientId              String?
+model PaymentMethod {
+  id                 Int       @id @default(autoincrement())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  name               String
+  discountPercentage Float     @default(0)
+  feePercentage      Float     @default(0)
+  group              Group?    @relation(fields: [groupId], references: [id])
+  groupId            Int?
+  doctor             Doctor?   @relation(fields: [doctorId], references: [id])
+  doctorId           Int?
+  payments           Payment[]
 }
 
 model JobType {
-  id        String   @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String
-  value     Float    @default(1)
-  job       Job[]
+  value     Float
+  group     Group?   @relation(fields: [groupId], references: [id])
+  groupId   Int?
+  doctor    Doctor?  @relation(fields: [doctorId], references: [id])
+  doctorId  Int?
+  jobs      Job[]
+}
+
+model Job {
+  id                 Int       @id @default(autoincrement())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  notes              String
+  installmentsNumber Float     @default(1)
+  installmentValue   Float
+  paidInstallments   Float     @default(0)
+  jobType            JobType   @relation(fields: [jobTypeId], references: [id])
+  jobTypeId          Int
+  group              Group?    @relation(fields: [groupId], references: [id])
+  groupId            Int?
+  doctor             Doctor?   @relation(fields: [doctorId], references: [id])
+  doctorId           Int?
+  client             Client?   @relation(fields: [clientId], references: [id])
+  clientId           Int?
+  payments           Payment[]
 }
 
 model Payment {
-  id        String        @id @default(uuid())
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  method    PaymentMethod @default(CASH)
-  value     Float         @default(1)
-  Job       Job           @relation(fields: [jobId], references: [id])
-  jobId     String
-  Client    Client?       @relation(fields: [clientId], references: [id])
-  clientId  String?
-  Doctor    Doctor?       @relation(fields: [doctorId], references: [id])
-  doctorId  String?
+  id              Int           @id @default(autoincrement())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  value           Float
+  method          PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+  paymentMethodId Int
+  group           Group?        @relation(fields: [groupId], references: [id])
+  groupId         Int?
+  doctor          Doctor?       @relation(fields: [doctorId], references: [id])
+  doctorId        Int?
+  client          Client?       @relation(fields: [clientId], references: [id])
+  clientId        Int?
+  job             Job?          @relation(fields: [jobId], references: [id])
+  jobId           Int?
 }
