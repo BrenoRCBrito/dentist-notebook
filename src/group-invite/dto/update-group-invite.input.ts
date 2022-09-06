@@ -1,12 +1,17 @@
-import { InputType, Field, Int } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { InviteStatus, Prisma } from '@prisma/client';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 @InputType()
 export class UpdateGroupInviteInput
   implements Prisma.GroupInviteUncheckedUpdateInput
 {
   @Field(() => Int)
-  id?: number;
+  @IsNotEmpty()
+  @IsNumber()
+  id: number;
   @Field()
+  @IsNotEmpty()
+  @IsString()
   status?: InviteStatus;
 }

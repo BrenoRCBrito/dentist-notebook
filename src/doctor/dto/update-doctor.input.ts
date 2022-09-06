@@ -1,4 +1,3 @@
-import { Optional } from '@nestjs/common';
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import {
@@ -7,6 +6,7 @@ import {
   IsEmail,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   MinLength,
 } from 'class-validator';
@@ -30,24 +30,24 @@ export class UpdateDoctorInput
   @IsNumber()
   id: number;
   @Field({ nullable: true })
-  @Optional()
+  @IsOptional()
   @IsAlpha()
   name?: string;
   @Field({ nullable: true })
-  @Optional()
+  @IsOptional()
   @IsAlpha()
   lastName?: string;
   @Field({ nullable: true })
-  @Optional()
+  @IsOptional()
   @IsEmail()
   email?: string;
   @Field({ nullable: true })
-  @Optional()
+  @IsOptional()
   @IsString()
   @MinLength(8)
   password?: string;
   @Field(() => [Int], { nullable: 'itemsAndList' })
-  @Optional()
+  @IsOptional()
   @IsArray()
   @IsNumber({}, { each: true })
   groups?: number[];
