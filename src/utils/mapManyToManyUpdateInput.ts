@@ -10,7 +10,9 @@ export default function mapManyToManyUpdateInput(
     if (current[0] === 'groups' || current[0] === 'clients') {
       accumulator[current[0]] = {
         connect: current[1].map((relationId) => {
-          return { id: relationId };
+          if (relationId !== 0) {
+            return { id: relationId };
+          }
         }),
       };
       return accumulator;
