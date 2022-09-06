@@ -5,7 +5,9 @@ export const CurrentUserAndToken = createParamDecorator(
   (data: unknown, context: ExecutionContext) => {
     const ctx = GqlExecutionContext.create(context);
     return {
-      authorization: ctx.getContext().req.headers.authorization,
+      authorization: (ctx.getContext().req.headers.authorization as string)
+        .replace('Bearer', '')
+        .trim(),
       user: ctx.getContext().req.user,
     };
   },

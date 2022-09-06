@@ -23,7 +23,7 @@ export class AuthResolver {
     return this.authService.signin(signInInput);
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Tokens)
   @UseGuards(GqlRefreshAuthGuard)
   refreshToken(@CurrentUserAndToken() payload: JwtPayloadWithToken) {
     return this.authService.refreshToken(payload);
