@@ -16,6 +16,11 @@ enum InviteStatus {
   WAITING
 }
 
+enum TokenStatus {
+  VALID
+  INVALID
+}
+
 model Group {
   id             Int             @id @default(autoincrement())
   createdAt      DateTime        @default(now())
@@ -38,8 +43,9 @@ model Doctor {
   updatedAt      DateTime        @updatedAt
   name           String
   lastName       String
-  email          String
+  email          String          @unique
   password       String
+  refreshTokens  RefreshToken[]
   groups         Group[]         @relation(name: "members")
   managedGroups  Group[]         @relation(name: "admin")
   clients        Client[]
@@ -48,6 +54,17 @@ model Doctor {
   payments       Payment[]
   jobTypes       JobType[]
   groupInvites   GroupInvite[]
+}
+
+model RefreshToken {
+  id         String      @id
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  lastUsedAt DateTime?
+  token      String      @unique
+  status     TokenStatus @default(VALID)
+  Doctor     Doctor?     @relation(fields: [doctorId], references: [id])
+  doctorId   Int?
 }
 
 model GroupInvite {
