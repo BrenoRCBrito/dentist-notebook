@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { join } from 'path';
+import { PrismaService } from '../prisma/prisma.service';
 import { AuthModule } from './auth/auth.module';
 import { ClientModule } from './client/client.module';
 import { DoctorModule } from './doctor/doctor.module';
@@ -12,6 +13,7 @@ import { JobTypeModule } from './job-type/job-type.module';
 import { JobModule } from './job/job.module';
 import { PaymentMethodModule } from './payment-method/payment-method.module';
 import { PaymentModule } from './payment/payment.module';
+import { RefreshTokenService } from './refresh-token/refresh-token.service';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -30,5 +32,6 @@ import { PaymentModule } from './payment/payment.module';
     PaymentModule,
     PaymentMethodModule,
   ],
+  providers: [RefreshTokenService, PrismaService],
 })
 export class AppModule {}
