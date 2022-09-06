@@ -7,7 +7,7 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import mapManyToManyUpdateInput from 'src/utils/mapManyToManyUpdateInput';
+import mapManyToManyUpdateInput from '../utils/mapManyToManyUpdateInput';
 import { DoctorService } from '../doctor/doctor.service';
 import { GroupService } from '../group/group.service';
 import { JobService } from '../job/job.service';

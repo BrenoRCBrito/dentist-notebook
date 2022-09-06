@@ -18,7 +18,7 @@ import { CreateDoctorInput } from './dto/create-doctor.input';
 import { UpdateDoctorInput } from './dto/update-doctor.input';
 import { Doctor } from './entities/doctor.entity';
 import { JobService } from '../job/job.service';
-import mapManyToManyUpdateInput from 'src/utils/mapManyToManyUpdateInput';
+import mapManyToManyUpdateInput from '../utils/mapManyToManyUpdateInput';
 
 @Resolver(() => Doctor)
 export class DoctorResolver {
