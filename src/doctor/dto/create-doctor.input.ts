@@ -1,14 +1,30 @@
 import { Field, InputType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
+import {
+  IsAlpha,
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 @InputType()
 export class CreateDoctorInput implements Prisma.DoctorCreateManyInput {
-  @Field()
+  @Field({ nullable: true })
+  @IsNotEmpty()
+  @IsAlpha()
   name: string;
-  @Field()
+  @Field({ nullable: true })
+  @IsNotEmpty()
+  @IsAlpha()
   lastName: string;
-  @Field()
+  @Field({ nullable: true })
+  @IsNotEmpty()
+  @IsEmail()
   email: string;
-  @Field()
+  @Field({ nullable: true })
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(8)
   password: string;
 }
