@@ -1,22 +1,22 @@
-type ManyToManyRelationsSimpleObject = {
+type ManyToManyRelationSimpleObject = {
   groups?: number[];
   clients?: number[];
 };
 
 export default function mapManyToManyUpdateInput(
-  updateInputObject: ManyToManyRelationsSimpleObject,
+  updateInputObject: ManyToManyRelationSimpleObject,
 ) {
-  return Object.entries(updateInputObject).reduce((acc, cur) => {
-    if (cur[0] === 'groups' || cur[0] === 'clients') {
-      acc[cur[0]] = {
-        connect: cur[1].map((relationId) => {
+  return Object.entries(updateInputObject).reduce((accumulator, current) => {
+    if (current[0] === 'groups' || current[0] === 'clients') {
+      accumulator[current[0]] = {
+        connect: current[1].map((relationId) => {
           return { id: relationId };
         }),
       };
-      return acc;
+      return accumulator;
     } else {
-      acc[cur[0]] = cur[1];
-      return acc;
+      accumulator[current[0]] = current[1];
+      return accumulator;
     }
   }, {});
 }
