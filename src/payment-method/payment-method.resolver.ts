@@ -29,7 +29,7 @@ export class PaymentMethodResolver {
     @Args('createPaymentMethodInput')
     createPaymentMethodInput: CreatePaymentMethodInput,
   ) {
-    return this.paymentMethodService.create(createPaymentMethodInput);
+    return this.paymentMethodService.create({ data: createPaymentMethodInput });
   }
 
   @Query(() => [PaymentMethod], { name: 'paymentMethods' })
@@ -39,7 +39,7 @@ export class PaymentMethodResolver {
 
   @Query(() => PaymentMethod, { name: 'paymentMethod' })
   findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.paymentMethodService.findOne(id);
+    return this.paymentMethodService.findOne({ where: { id } });
   }
 
   @Mutation(() => PaymentMethod)
@@ -47,31 +47,35 @@ export class PaymentMethodResolver {
     @Args('updatePaymentMethodInput')
     updatePaymentMethodInput: UpdatePaymentMethodInput,
   ) {
-    return this.paymentMethodService.update(
-      updatePaymentMethodInput.id,
-      updatePaymentMethodInput,
-    );
+    return this.paymentMethodService.update({
+      where: { id: updatePaymentMethodInput.id },
+      data: updatePaymentMethodInput,
+    });
   }
 
   @Mutation(() => PaymentMethod)
   removePaymentMethod(@Args('id', { type: () => Int }) id: number) {
-    return this.paymentMethodService.remove(id);
+    return this.paymentMethodService.remove({ where: { id } });
   }
 
   @ResolveField()
   group(@Parent() paymentMethod: PaymentMethod) {
     if (!paymentMethod.groupId) return null;
-    return this.groupService.findOne(paymentMethod.groupId);
+    return this.groupService.findOne({ where: { id: paymentMethod.groupId } });
   }
 
   @ResolveField()
   doctor(@Parent() paymentMethod: PaymentMethod) {
     if (!paymentMethod.doctorId) return null;
-    return this.doctorService.findOne(paymentMethod.doctorId);
+    return this.doctorService.findOne({
+      where: { id: paymentMethod.doctorId },
+    });
   }
 
   @ResolveField()
   payments(@Parent() paymentMethod: PaymentMethod) {
-    return this.paymentService.findAllByMethod(paymentMethod.id);
+    return this.paymentService.findAll({
+      where: { paymentMethodId: paymentMethod.id },
+    });
   }
 }

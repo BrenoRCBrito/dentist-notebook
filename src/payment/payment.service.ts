@@ -1,60 +1,29 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreatePaymentInput } from './dto/create-payment.input';
-import { UpdatePaymentInput } from './dto/update-payment.input';
 
 @Injectable()
 export class PaymentService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createPaymentInput: CreatePaymentInput) {
-    return this.prisma.payment.create({ data: createPaymentInput });
+  create(args: Prisma.PaymentCreateArgs) {
+    return this.prisma.payment.create(args);
   }
 
-  findAll() {
-    return this.prisma.payment.findMany();
+  findAll(args?: Prisma.PaymentFindManyArgs) {
+    return this.prisma.payment.findMany(args);
   }
 
-  findAllByClient(clientId: number) {
-    return this.prisma.payment.findMany({
-      where: {
-        clientId,
-      },
-    });
+  findOne(args: Prisma.PaymentFindUniqueArgs) {
+    if (Object.values(args.where).every((value) => value === null)) return null;
+    return this.prisma.payment.findUnique(args);
   }
 
-  findAllByGroup(groupId: number) {
-    return this.prisma.payment.findMany({
-      where: { groupId },
-    });
+  update(args: Prisma.PaymentUpdateArgs) {
+    return this.prisma.payment.update(args);
   }
 
-  findAllByDoctor(doctorId: number) {
-    return this.prisma.payment.findMany({
-      where: { doctorId },
-    });
-  }
-
-  findAllByJob(jobId: number) {
-    return this.prisma.payment.findMany({ where: { jobId } });
-  }
-
-  findAllByMethod(paymentMethodId: number) {
-    return this.prisma.payment.findMany({ where: { paymentMethodId } });
-  }
-
-  findOne(id: number) {
-    return this.prisma.payment.findUnique({ where: { id } });
-  }
-
-  update(id: number, updatePaymentInput: UpdatePaymentInput) {
-    return this.prisma.payment.update({
-      where: { id },
-      data: updatePaymentInput,
-    });
-  }
-
-  remove(id: number) {
-    return this.prisma.payment.delete({ where: { id } });
+  remove(args: Prisma.PaymentDeleteArgs) {
+    return this.prisma.payment.delete(args);
   }
 }

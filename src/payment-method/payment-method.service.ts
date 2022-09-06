@@ -1,46 +1,29 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreatePaymentMethodInput } from './dto/create-payment-method.input';
-import { UpdatePaymentMethodInput } from './dto/update-payment-method.input';
 
 @Injectable()
 export class PaymentMethodService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createPaymentMethodInput: CreatePaymentMethodInput) {
-    return this.prisma.paymentMethod.createMany({
-      data: createPaymentMethodInput,
-    });
+  create(args: Prisma.PaymentMethodCreateArgs) {
+    return this.prisma.paymentMethod.create(args);
   }
 
-  findAll() {
-    return this.prisma.paymentMethod.findMany();
+  findAll(args?: Prisma.PaymentMethodFindManyArgs) {
+    return this.prisma.paymentMethod.findMany(args);
   }
 
-  findAllByDoctor(doctorId: number) {
-    return this.prisma.paymentMethod.findMany({
-      where: { doctorId },
-    });
+  findOne(args: Prisma.PaymentMethodFindUniqueArgs) {
+    if (Object.values(args.where).every((value) => value === null)) return null;
+    return this.prisma.paymentMethod.findUnique(args);
   }
 
-  findAllByGroup(groupId: number) {
-    return this.prisma.paymentMethod.findMany({
-      where: { groupId },
-    });
+  update(args: Prisma.PaymentMethodUpdateArgs) {
+    return this.prisma.paymentMethod.update(args);
   }
 
-  findOne(id: number) {
-    return this.prisma.paymentMethod.findUnique({ where: { id } });
-  }
-
-  update(id: number, updatePaymentMethodInput: UpdatePaymentMethodInput) {
-    return this.prisma.paymentMethod.update({
-      where: { id },
-      data: updatePaymentMethodInput,
-    });
-  }
-
-  remove(id: number) {
-    return this.prisma.paymentMethod.delete({ where: { id } });
+  remove(args: Prisma.PaymentMethodDeleteArgs) {
+    return this.prisma.paymentMethod.delete(args);
   }
 }

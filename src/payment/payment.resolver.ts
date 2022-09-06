@@ -32,7 +32,7 @@ export class PaymentResolver {
   createPayment(
     @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
   ) {
-    return this.paymentService.create(createPaymentInput);
+    return this.paymentService.create({ data: createPaymentInput });
   }
 
   @Query(() => [Payment], { name: 'payments' })
@@ -42,48 +42,50 @@ export class PaymentResolver {
 
   @Query(() => Payment, { name: 'payment' })
   findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.paymentService.findOne(id);
+    return this.paymentService.findOne({ where: { id } });
   }
 
   @Mutation(() => Payment)
   updatePayment(
     @Args('updatePaymentInput') updatePaymentInput: UpdatePaymentInput,
   ) {
-    return this.paymentService.update(
-      updatePaymentInput.id,
-      updatePaymentInput,
-    );
+    return this.paymentService.update({
+      where: { id: updatePaymentInput.id },
+      data: updatePaymentInput,
+    });
   }
 
   @Mutation(() => Payment)
   removePayment(@Args('id', { type: () => Int }) id: number) {
-    return this.paymentService.remove(id);
+    return this.paymentService.remove({ where: { id } });
   }
 
   @ResolveField()
   method(@Parent() payment: Payment) {
-    return this.paymentMethodService.findOne(payment.paymentMethodId);
+    return this.paymentMethodService.findOne({
+      where: { id: payment.paymentMethodId },
+    });
   }
 
   @ResolveField()
   group(@Parent() payment: Payment) {
     if (!payment.groupId) return null;
-    return this.groupService.findOne(payment.groupId);
+    return this.groupService.findOne({ where: { id: payment.groupId } });
   }
 
   @ResolveField()
   doctor(@Parent() payment: Payment) {
     if (!payment.doctorId) return null;
-    return this.doctorService.findOne(payment.doctorId);
+    return this.doctorService.findOne({ where: { id: payment.doctorId } });
   }
 
   @ResolveField()
   client(@Parent() payment: Payment) {
-    return this.clientService.findOne(payment.clientId);
+    return this.clientService.findOne({ where: { id: payment.clientId } });
   }
 
   @ResolveField()
   job(@Parent() payment: Payment) {
-    return this.jobService.findOne(payment.jobId);
+    return this.jobService.findOne({ where: { id: payment.jobId } });
   }
 }

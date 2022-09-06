@@ -1,44 +1,29 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreateGroupInviteInput } from './dto/create-group-invite.input';
-import { UpdateGroupInviteInput } from './dto/update-group-invite.input';
 
 @Injectable()
 export class GroupInviteService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createGroupInviteInput: CreateGroupInviteInput) {
-    return this.prisma.groupInvite.create({ data: createGroupInviteInput });
+  create(args: Prisma.GroupInviteCreateArgs) {
+    return this.prisma.groupInvite.create(args);
   }
 
-  findAll() {
-    return this.prisma.groupInvite.findMany();
+  findAll(args?: Prisma.GroupInviteFindManyArgs) {
+    return this.prisma.groupInvite.findMany(args);
   }
 
-  findAllByDoctor(doctorId: number) {
-    return this.prisma.groupInvite.findMany({
-      where: { doctorId },
-    });
+  findOne(args: Prisma.GroupInviteFindUniqueArgs) {
+    if (Object.values(args.where).every((value) => value === null)) return null;
+    return this.prisma.groupInvite.findUnique(args);
   }
 
-  findAllByGroup(groupId: number) {
-    return this.prisma.groupInvite.findMany({
-      where: { groupId },
-    });
+  update(args: Prisma.GroupInviteUpdateArgs) {
+    return this.prisma.groupInvite.update(args);
   }
 
-  findOne(id: number) {
-    return this.prisma.groupInvite.findUnique({ where: { id } });
-  }
-
-  update(id: number, updateGroupInviteInput: UpdateGroupInviteInput) {
-    return this.prisma.groupInvite.update({
-      where: { id },
-      data: updateGroupInviteInput,
-    });
-  }
-
-  remove(id: number) {
-    return this.prisma.groupInvite.delete({ where: { id } });
+  remove(args: Prisma.GroupInviteDeleteArgs) {
+    return this.prisma.groupInvite.delete(args);
   }
 }

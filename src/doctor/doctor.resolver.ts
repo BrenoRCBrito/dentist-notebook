@@ -18,6 +18,7 @@ import { CreateDoctorInput } from './dto/create-doctor.input';
 import { UpdateDoctorInput } from './dto/update-doctor.input';
 import { Doctor } from './entities/doctor.entity';
 import { JobService } from '../job/job.service';
+import mapManyToManyUpdateInput from 'src/utils/mapManyToManyUpdateInput';
 
 @Resolver(() => Doctor)
 export class DoctorResolver {
@@ -36,7 +37,7 @@ export class DoctorResolver {
   createDoctor(
     @Args('createDoctorInput') createDoctorInput: CreateDoctorInput,
   ) {
-    return this.doctorService.create(createDoctorInput);
+    return this.doctorService.create({ data: createDoctorInput });
   }
 
   @Query(() => [Doctor], { name: 'doctors' })
@@ -46,58 +47,90 @@ export class DoctorResolver {
 
   @Query(() => Doctor, { name: 'doctor' })
   findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.doctorService.findOne(id);
+    return this.doctorService.findOne({ where: { id } });
   }
 
   @Mutation(() => Doctor)
   updateDoctor(
     @Args('updateDoctorInput') updateDoctorInput: UpdateDoctorInput,
   ) {
-    return this.doctorService.update(updateDoctorInput.id, updateDoctorInput);
+    let checkedInput;
+    if (
+      Array.isArray(updateDoctorInput.groups) &&
+      updateDoctorInput.groups.length > 0
+    ) {
+      checkedInput = mapManyToManyUpdateInput(updateDoctorInput);
+    } else checkedInput = updateDoctorInput;
+    return this.doctorService.update({
+      where: { id: updateDoctorInput.id },
+      data: checkedInput,
+    });
   }
 
   @Mutation(() => Doctor)
   removeDoctor(@Args('id', { type: () => Int }) id: number) {
-    return this.doctorService.remove(id);
+    return this.doctorService.remove({ where: { id } });
   }
 
   @ResolveField()
   clients(@Parent() doctor: Doctor) {
-    return this.clientService.findAllByDoctor(doctor.id);
+    return this.clientService.findAll({
+      where: {
+        doctors: {
+          some: {
+            id: doctor.id,
+          },
+        },
+      },
+    });
   }
 
   @ResolveField()
   managedGroups(@Parent() doctor: Doctor) {
-    return this.groupService.findAllByAdmin(doctor.id);
+    return this.groupService.findAll({
+      where: { adminId: doctor.id },
+    });
   }
 
   @ResolveField()
   groups(@Parent() doctor: Doctor) {
-    return this.groupService.findAllByDoctor(doctor.id);
+    return this.groupService.findAll({
+      where: { doctors: { some: { id: doctor.id } } },
+    });
   }
 
   @ResolveField()
   jobs(@Parent() doctor: Doctor) {
-    return this.jobService.findAllByDoctor(doctor.id);
+    return this.jobService.findAll({
+      where: { doctorId: doctor.id },
+    });
   }
 
   @ResolveField()
   paymentMethods(@Parent() doctor: Doctor) {
-    return this.paymentMethodService.findAllByDoctor(doctor.id);
+    return this.paymentMethodService.findAll({
+      where: { doctorId: doctor.id },
+    });
   }
 
   @ResolveField()
   payments(@Parent() doctor: Doctor) {
-    return this.paymentService.findAllByDoctor(doctor.id);
+    return this.paymentService.findAll({
+      where: { doctorId: doctor.id },
+    });
   }
 
   @ResolveField()
   jobTypes(@Parent() doctor: Doctor) {
-    return this.jobTypeService.findAllByDoctor(doctor.id);
+    return this.jobTypeService.findAll({
+      where: { doctorId: doctor.id },
+    });
   }
 
   @ResolveField()
   groupInvites(@Parent() doctor: Doctor) {
-    return this.groupInviteService.findAllByDoctor(doctor.id);
+    return this.groupInviteService.findAll({
+      where: { doctorId: doctor.id },
+    });
   }
 }

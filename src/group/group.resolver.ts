@@ -34,7 +34,7 @@ export class GroupResolver {
 
   @Mutation(() => Group)
   createGroup(@Args('createGroupInput') createGroupInput: CreateGroupInput) {
-    return this.groupService.create(createGroupInput);
+    return this.groupService.create({ data: createGroupInput });
   }
 
   @Query(() => [Group], { name: 'groups' })
@@ -44,56 +44,79 @@ export class GroupResolver {
 
   @Query(() => Group, { name: 'group' })
   findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.groupService.findOne(id);
+    return this.groupService.findOne({ where: { id } });
   }
 
   @Mutation(() => Group)
   updateGroup(@Args('updateGroupInput') updateGroupInput: UpdateGroupInput) {
-    return this.groupService.update(updateGroupInput.id, updateGroupInput);
+    return this.groupService.update({
+      where: { id: updateGroupInput.id },
+      data: updateGroupInput,
+    });
   }
 
   @Mutation(() => Group)
   removeGroup(@Args('id', { type: () => Int }) id: number) {
-    return this.groupService.remove(id);
+    return this.groupService.remove({ where: { id } });
   }
 
   @ResolveField()
   admin(@Parent() group: Group) {
-    return this.doctorService.findGroupAdmin(group.adminId);
+    return this.doctorService.findOne({ where: { id: group.adminId } });
   }
 
   @ResolveField()
   doctors(@Parent() group: Group) {
-    return this.doctorService.findAllByGroup(group.id);
+    return this.doctorService.findAll({
+      where: { groups: { some: { id: group.id } } },
+    });
   }
 
   @ResolveField()
   clients(@Parent() group: Group) {
-    return this.clientService.findAllByGroup(group.id);
+    return this.clientService.findAll({
+      where: {
+        groups: {
+          some: {
+            id: group.id,
+          },
+        },
+      },
+    });
   }
 
   @ResolveField()
   jobs(@Parent() group: Group) {
-    return this.jobService.findAllByGroup(group.id);
+    return this.jobService.findAll({
+      where: { groupId: group.id },
+    });
   }
 
   @ResolveField()
   paymentMethods(@Parent() group: Group) {
-    return this.paymentMethodService.findAllByGroup(group.id);
+    return this.paymentMethodService.findAll({
+      where: { groupId: group.id },
+    });
   }
 
   @ResolveField()
   payments(@Parent() group: Group) {
-    return this.paymentService.findAllByGroup(group.id);
+    return this.paymentService.findAll({
+      where: { groupId: group.id },
+    });
   }
 
   @ResolveField()
   jobTypes(@Parent() group: Group) {
-    return this.jobTypeService.findAllByGroup(group.id);
+    return this.jobTypeService.findAll({
+      where: { groupId: group.id },
+    });
   }
 
   @ResolveField()
   invites(@Parent() group: Group) {
-    return this.groupInviteService.findAllByGroup(group.id);
+    return this.groupInviteService.findAll({
+      where: { groupId: group.id },
+    });
   }
 }

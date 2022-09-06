@@ -27,7 +27,7 @@ export class GroupInviteResolver {
     @Args('createGroupInviteInput')
     createGroupInviteInput: CreateGroupInviteInput,
   ) {
-    return this.groupInviteService.create(createGroupInviteInput);
+    return this.groupInviteService.create({ data: createGroupInviteInput });
   }
 
   @Query(() => [GroupInvite], { name: 'groupInvites' })
@@ -37,7 +37,7 @@ export class GroupInviteResolver {
 
   @Query(() => GroupInvite, { name: 'groupInvite' })
   findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.groupInviteService.findOne(id);
+    return this.groupInviteService.findOne({ where: { id } });
   }
 
   @Mutation(() => GroupInvite)
@@ -45,24 +45,26 @@ export class GroupInviteResolver {
     @Args('updateGroupInviteInput')
     updateGroupInviteInput: UpdateGroupInviteInput,
   ) {
-    return this.groupInviteService.update(
-      updateGroupInviteInput.id,
-      updateGroupInviteInput,
-    );
+    return this.groupInviteService.update({
+      where: { id: updateGroupInviteInput.id },
+      data: updateGroupInviteInput,
+    });
   }
 
   @Mutation(() => GroupInvite)
   removeGroupInvite(@Args('id', { type: () => Int }) id: number) {
-    return this.groupInviteService.remove(id);
+    return this.groupInviteService.remove({ where: { id } });
   }
 
   @ResolveField()
-  group(@Parent() group: GroupInvite) {
-    return this.groupService.findOneByInvite(group.groupId);
+  group(@Parent() groupInvite: GroupInvite) {
+    return this.groupService.findAll({
+      where: { invites: { some: { id: groupInvite.groupId } } },
+    });
   }
 
   @ResolveField()
-  doctor(@Parent() group: GroupInvite) {
-    return this.doctorService.findOneByInvite(group.doctorId);
+  doctor(@Parent() groupInvite: GroupInvite) {
+    return this.doctorService.findOne({ where: { id: groupInvite.doctorId } });
   }
 }

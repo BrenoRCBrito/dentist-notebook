@@ -1,55 +1,29 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreateJobInput } from './dto/create-job.input';
-import { UpdateJobInput } from './dto/update-job.input';
 
 @Injectable()
 export class JobService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createJobInput: CreateJobInput) {
-    return this.prisma.job.create({ data: createJobInput });
+  create(args: Prisma.JobCreateArgs) {
+    return this.prisma.job.create(args);
   }
 
-  findAll() {
-    return this.prisma.job.findMany();
+  findAll(args?: Prisma.JobFindManyArgs) {
+    return this.prisma.job.findMany(args);
   }
 
-  findAllByClient(clientId: number) {
-    return this.prisma.job.findMany({
-      where: {
-        clientId,
-      },
-    });
+  findOne(args: Prisma.JobFindUniqueArgs) {
+    if (Object.values(args.where).every((value) => value === null)) return null;
+    return this.prisma.job.findUnique(args);
   }
 
-  findAllByDoctor(doctorId: number) {
-    return this.prisma.job.findMany({
-      where: { doctorId },
-    });
+  update(args: Prisma.JobUpdateArgs) {
+    return this.prisma.job.update(args);
   }
 
-  findAllByGroup(groupId: number) {
-    return this.prisma.job.findMany({
-      where: { groupId },
-    });
-  }
-
-  findAllByJobType(jobTypeId: number) {
-    return this.prisma.job.findMany({
-      where: { jobTypeId },
-    });
-  }
-
-  findOne(id: number) {
-    return this.prisma.job.findUnique({ where: { id } });
-  }
-
-  update(id: number, updateJobInput: UpdateJobInput) {
-    return this.prisma.job.update({ where: { id }, data: updateJobInput });
-  }
-
-  remove(id: number) {
-    return this.prisma.job.delete({ where: { id } });
+  remove(args: Prisma.JobDeleteArgs) {
+    return this.prisma.job.delete(args);
   }
 }

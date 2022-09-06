@@ -28,7 +28,7 @@ export class JobTypeResolver {
   createJobType(
     @Args('createJobTypeInput') createJobTypeInput: CreateJobTypeInput,
   ) {
-    return this.jobTypeService.create(createJobTypeInput);
+    return this.jobTypeService.create({ data: createJobTypeInput });
   }
 
   @Query(() => [JobType], { name: 'jobTypes' })
@@ -38,38 +38,40 @@ export class JobTypeResolver {
 
   @Query(() => JobType, { name: 'jobType' })
   findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.jobTypeService.findOne(id);
+    return this.jobTypeService.findOne({ where: { id } });
   }
 
   @Mutation(() => JobType)
   updateJobType(
     @Args('updateJobTypeInput') updateJobTypeInput: UpdateJobTypeInput,
   ) {
-    return this.jobTypeService.update(
-      updateJobTypeInput.id,
-      updateJobTypeInput,
-    );
+    return this.jobTypeService.update({
+      where: { id: updateJobTypeInput.id },
+      data: updateJobTypeInput,
+    });
   }
 
   @Mutation(() => JobType)
   removeJobType(@Args('id', { type: () => Int }) id: number) {
-    return this.jobTypeService.remove(id);
+    return this.jobTypeService.remove({ where: { id } });
   }
 
   @ResolveField()
   group(@Parent() jobType: JobType) {
     if (!jobType.groupId) return null;
-    return this.groupService.findOne(jobType.groupId);
+    return this.groupService.findOne({ where: { id: jobType.groupId } });
   }
 
   @ResolveField()
   doctor(@Parent() jobType: JobType) {
     if (!jobType.doctorId) return null;
-    return this.doctorService.findOne(jobType.doctorId);
+    return this.doctorService.findOne({ where: { id: jobType.doctorId } });
   }
 
   @ResolveField()
   jobs(@Parent() jobType: JobType) {
-    return this.jobService.findAllByJobType(jobType.id);
+    return this.jobService.findAll({
+      where: { jobTypeId: jobType.id },
+    });
   }
 }
