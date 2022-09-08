@@ -1,4 +1,4 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import {
   IsAlpha,
@@ -10,6 +10,7 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
+import { int, intArray } from '../../graphql-type-functions/type-functions';
 
 interface SimplifyRelationFields {
   //  The original prisma object shape for connecting Many to Many rows is:
@@ -25,7 +26,7 @@ interface SimplifyRelationFields {
 export class UpdateDoctorInput
   implements Prisma.DoctorUncheckedUpdateManyInput, SimplifyRelationFields
 {
-  @Field(() => Int)
+  @Field(int)
   @IsNotEmpty()
   @IsNumber()
   id: number;
@@ -46,7 +47,7 @@ export class UpdateDoctorInput
   @IsString()
   @MinLength(8)
   password?: string;
-  @Field(() => [Int], { nullable: 'itemsAndList' })
+  @Field(intArray, { nullable: 'itemsAndList' })
   @IsOptional()
   @IsArray()
   @IsNumber({}, { each: true })

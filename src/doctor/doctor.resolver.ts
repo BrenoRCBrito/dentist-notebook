@@ -1,26 +1,30 @@
 import {
   Args,
-  Int,
   Mutation,
   Parent,
   Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
+import { ClientService } from '../client/client.service';
+import {
+  doctor,
+  doctorArray,
+  int,
+} from '../graphql-type-functions/type-functions';
 import { GroupInviteService } from '../group-invite/group-invite.service';
 import { GroupService } from '../group/group.service';
 import { JobTypeService } from '../job-type/job-type.service';
+import { JobService } from '../job/job.service';
 import { PaymentMethodService } from '../payment-method/payment-method.service';
 import { PaymentService } from '../payment/payment.service';
-import { ClientService } from '../client/client.service';
+import mapManyToManyUpdateInput from '../utils/mapManyToManyUpdateInput';
 import { DoctorService } from './doctor.service';
 import { CreateDoctorInput } from './dto/create-doctor.input';
 import { UpdateDoctorInput } from './dto/update-doctor.input';
 import { Doctor } from './entities/doctor.entity';
-import { JobService } from '../job/job.service';
-import mapManyToManyUpdateInput from '../utils/mapManyToManyUpdateInput';
 
-@Resolver(() => Doctor)
+@Resolver(doctor)
 export class DoctorResolver {
   constructor(
     private readonly doctorService: DoctorService,
@@ -33,24 +37,24 @@ export class DoctorResolver {
     private readonly groupInviteService: GroupInviteService,
   ) {}
 
-  @Mutation(() => Doctor)
+  @Mutation(doctor)
   createDoctor(
     @Args('createDoctorInput') createDoctorInput: CreateDoctorInput,
   ) {
     return this.doctorService.create({ data: createDoctorInput });
   }
 
-  @Query(() => [Doctor], { name: 'doctors' })
+  @Query(doctorArray, { name: 'doctors' })
   findAll() {
     return this.doctorService.findAll();
   }
 
-  @Query(() => Doctor, { name: 'doctor' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  @Query(doctor, { name: 'doctor' })
+  findOne(@Args('id', { type: int }) id: number) {
     return this.doctorService.findOne({ where: { id } });
   }
 
-  @Mutation(() => Doctor)
+  @Mutation(doctor)
   updateDoctor(
     @Args('updateDoctorInput') updateDoctorInput: UpdateDoctorInput,
   ) {
@@ -67,8 +71,8 @@ export class DoctorResolver {
     });
   }
 
-  @Mutation(() => Doctor)
-  removeDoctor(@Args('id', { type: () => Int }) id: number) {
+  @Mutation(doctor)
+  removeDoctor(@Args('id', { type: int }) id: number) {
     return this.doctorService.remove({ where: { id } });
   }
 

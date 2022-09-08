@@ -1,19 +1,30 @@
-import { ObjectType, Field, Int, GraphQLISODateTime } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
+import { Client } from '../../client/entities/client.entity';
+import {
+  clientArray,
+  groupArray,
+  groupInviteArray,
+  int,
+  isoDateTime,
+  jobArray,
+  jobTypeArray,
+  paymentArray,
+  paymentMethodArray,
+} from '../../graphql-type-functions/type-functions';
 import { GroupInvite } from '../../group-invite/entities/group-invite.entity';
 import { Group } from '../../group/entities/group.entity';
 import { JobType } from '../../job-type/entities/job-type.entity';
 import { Job } from '../../job/entities/job.entity';
 import { PaymentMethod } from '../../payment-method/entities/payment-method.entity';
 import { Payment } from '../../payment/entities/payment.entity';
-import { Client } from '../../client/entities/client.entity';
 
 @ObjectType()
 export class Doctor {
-  @Field(() => Int)
+  @Field(int)
   id: number;
-  @Field(() => GraphQLISODateTime)
+  @Field(isoDateTime)
   createdAt: Date;
-  @Field(() => GraphQLISODateTime)
+  @Field(isoDateTime)
   updatedAt: Date;
   @Field()
   name: string;
@@ -23,20 +34,20 @@ export class Doctor {
   email: string;
   @Field()
   password: string;
-  @Field(() => [Group], { nullable: 'items' })
+  @Field(groupArray, { nullable: 'items' })
   groups: Group[];
-  @Field(() => [Group], { nullable: 'items' })
+  @Field(groupArray, { nullable: 'items' })
   managedGroups: Group[];
-  @Field(() => [Client], { nullable: 'items' })
+  @Field(clientArray, { nullable: 'items' })
   clients: Client[];
-  @Field(() => [Job], { nullable: 'items' })
+  @Field(jobArray, { nullable: 'items' })
   jobs: Job[];
-  @Field(() => [PaymentMethod], { nullable: 'items' })
+  @Field(paymentMethodArray, { nullable: 'items' })
   paymentMethods: PaymentMethod[];
-  @Field(() => [Payment], { nullable: 'items' })
+  @Field(paymentArray, { nullable: 'items' })
   payments: Payment[];
-  @Field(() => [JobType], { nullable: 'items' })
+  @Field(jobTypeArray, { nullable: 'items' })
   jobTypes: JobType[];
-  @Field(() => [GroupInvite], { nullable: 'items' })
-  groupInvites: [GroupInvite];
+  @Field(groupInviteArray, { nullable: 'items' })
+  groupInvites: GroupInvite[];
 }
