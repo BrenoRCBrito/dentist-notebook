@@ -4,7 +4,7 @@ type ManyToManyRelationSimpleObject = {
 };
 
 export default function mapManyToManyUpdateInput(
-  updateInputObject: ManyToManyRelationSimpleObject,
+  updateInputObject: ManyToManyRelationSimpleObject | unknown,
 ) {
   return Object.entries(updateInputObject).reduce((accumulator, current) => {
     if (current[0] === 'groups' || current[0] === 'clients') {
