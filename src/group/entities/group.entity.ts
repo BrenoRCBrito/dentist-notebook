@@ -22,17 +22,17 @@ export class Group {
   @Field(() => Int)
   adminId: number;
   @Field(() => [Doctor], { nullable: 'items' })
-  doctors: Doctor;
+  doctors: Doctor[];
   @Field(() => [Client], { nullable: 'items' })
   clients: Client[];
   @Field(() => [Job], { nullable: 'items' })
-  jobs: Job;
+  jobs: Job[];
   @Field(() => [PaymentMethod], { nullable: 'items' })
-  paymentMethods: PaymentMethod;
+  paymentMethods: PaymentMethod[];
   @Field(() => [Payment], { nullable: 'items' })
-  payments: Payment;
+  payments: Payment[];
   @Field(() => [JobType], { nullable: 'items' })
-  jobTypes: JobType;
+  jobTypes: JobType[];
   @Field(() => [GroupInvite], { nullable: 'items' })
-  invites: GroupInvite;
+  invites: GroupInvite[];
 }

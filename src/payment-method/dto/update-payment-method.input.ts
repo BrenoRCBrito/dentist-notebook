@@ -4,8 +4,11 @@ import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 @InputType()
 export class UpdatePaymentMethodInput
-  implements Prisma.PaymentMethodUncheckedCreateInput
+  implements Prisma.PaymentMethodUncheckedUpdateInput
 {
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutMethodInput;
   @Field(() => Int)
   @IsNotEmpty()
   @IsNumber()
@@ -13,7 +16,7 @@ export class UpdatePaymentMethodInput
   @Field()
   @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
   @Field(() => Float)
   @IsOptional()
   @IsNumber()
