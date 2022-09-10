@@ -76,7 +76,7 @@ describe('DoctorResolver', () => {
   });
 
   describe('createDoctor', () => {
-    it('should return the created doctor ', async () => {
+    it('should return the created doctor', async () => {
       service.create = jest.fn().mockResolvedValue(results.create);
       expect(await resolver.createDoctor(createDoctor1Input)).toStrictEqual(
         results.create,
@@ -113,7 +113,7 @@ describe('DoctorResolver', () => {
       );
     });
 
-    it('', async () => {
+    it('a connection array should not disrupt the update functionality', async () => {
       service.update = jest.fn().mockResolvedValue(results.updateDoctor.second);
       expect(await resolver.updateDoctor(updateDoctor2Input2)).toStrictEqual(
         results.updateDoctor.second,
