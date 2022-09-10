@@ -22,10 +22,10 @@ export class AuthService {
   ) {}
 
   async signup(signUpInput: SignUpInput) {
-    const doctorExists = await this.doctorService.findOne({
+    const registeringDoctor = await this.doctorService.findOne({
       where: { email: signUpInput.email },
     });
-    if (doctorExists !== null)
+    if (registeringDoctor !== null)
       throw new BadRequestException(`Doctor already exists`);
     const hashedPassword: string = await argon2.hash(signUpInput.password);
     const newDoctor = await this.doctorService.create({

@@ -11,6 +11,7 @@ export class RefreshTokenService {
   }
 
   findOne(args: Prisma.RefreshTokenFindUniqueArgs) {
+    if (Object.values(args.where).every((value) => value === null)) return null;
     return this.prisma.refreshToken.findUnique(args);
   }
 
