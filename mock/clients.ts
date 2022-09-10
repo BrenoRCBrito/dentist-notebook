@@ -11,6 +11,12 @@ export const createClient1Input: CreateClientInput = {
   lastName: 'Magno',
 };
 
+export const createClient2Input: CreateClientInput = {
+  name: 'Sandra',
+  lastName: 'Lima',
+  doctors: [2],
+};
+
 export const updateClient2Input: UpdateClientInput = {
   id: 2,
   lastName: 'Faria',
