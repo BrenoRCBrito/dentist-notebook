@@ -1,15 +1,14 @@
-import { Field, Float, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { float, int } from '../../graphql-type-functions/type-functions';
 
 @InputType()
 export class UpdatePaymentMethodInput
   implements Prisma.PaymentMethodUncheckedUpdateInput
 {
-  createdAt?: string | Date;
-  updatedAt?: string | Date;
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutMethodInput;
-  @Field(() => Int)
+  @Field(int)
   @IsNotEmpty()
   @IsNumber()
   id: number;
@@ -17,19 +16,19 @@ export class UpdatePaymentMethodInput
   @IsOptional()
   @IsString()
   name?: string;
-  @Field(() => Float)
+  @Field(float)
   @IsOptional()
   @IsNumber()
   discountPercentage?: number;
-  @Field(() => Float)
+  @Field(float)
   @IsOptional()
   @IsNumber()
   feePercentage?: number;
-  @Field(() => Int)
+  @Field(int)
   @IsOptional()
   @IsNumber()
   groupId?: number;
-  @Field(() => Int)
+  @Field(int)
   @IsOptional()
   @IsNumber()
   doctorId?: number;

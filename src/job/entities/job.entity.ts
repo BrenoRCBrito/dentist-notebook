@@ -1,10 +1,14 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import {
-  Field,
-  Float,
-  GraphQLISODateTime,
-  Int,
-  ObjectType,
-} from '@nestjs/graphql';
+  client,
+  doctor,
+  float,
+  group,
+  int,
+  isoDateTime,
+  jobType,
+  paymentArray,
+} from '../../graphql-type-functions/type-functions';
 import { Client } from '../../client/entities/client.entity';
 import { Doctor } from '../../doctor/entities/doctor.entity';
 import { Group } from '../../group/entities/group.entity';
@@ -13,36 +17,36 @@ import { Payment } from '../../payment/entities/payment.entity';
 
 @ObjectType()
 export class Job {
-  @Field(() => Int)
+  @Field(int)
   id: number;
-  @Field(() => GraphQLISODateTime)
+  @Field(isoDateTime)
   createdAt: Date;
-  @Field(() => GraphQLISODateTime)
+  @Field(isoDateTime)
   updatedAt: Date;
   @Field()
   notes: string;
-  @Field(() => Float)
+  @Field(float)
   installmentsNumber: number;
-  @Field(() => Float)
+  @Field(float)
   installmentValue: number;
-  @Field(() => Float)
+  @Field(float)
   paidInstallments: number;
-  @Field(() => JobType)
+  @Field(jobType)
   jobType: JobType;
-  @Field(() => Int)
+  @Field(int)
   jobTypeId: number;
-  @Field(() => Group, { nullable: true })
+  @Field(group, { nullable: true })
   group: Group;
-  @Field(() => Int, { nullable: true })
+  @Field(int, { nullable: true })
   groupId: number;
-  @Field(() => Doctor)
+  @Field(doctor)
   doctor: Doctor;
-  @Field(() => Int)
+  @Field(int)
   doctorId: number;
-  @Field(() => Client)
+  @Field(client)
   client: Client;
-  @Field(() => Int)
+  @Field(int)
   clientId: number;
-  @Field(() => [Payment], { nullable: 'items' })
+  @Field(paymentArray, { nullable: 'items' })
   payments: Payment[];
 }

@@ -1,23 +1,27 @@
 import {
   Args,
-  Int,
   Mutation,
   Parent,
   Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { PaymentMethodService } from '../payment-method/payment-method.service';
 import { ClientService } from '../client/client.service';
 import { DoctorService } from '../doctor/doctor.service';
+import {
+  int,
+  payment,
+  paymentArray,
+} from '../graphql-type-functions/type-functions';
 import { GroupService } from '../group/group.service';
 import { JobService } from '../job/job.service';
+import { PaymentMethodService } from '../payment-method/payment-method.service';
 import { CreatePaymentInput } from './dto/create-payment.input';
 import { UpdatePaymentInput } from './dto/update-payment.input';
 import { Payment } from './entities/payment.entity';
 import { PaymentService } from './payment.service';
 
-@Resolver(() => Payment)
+@Resolver(payment)
 export class PaymentResolver {
   constructor(
     private readonly paymentService: PaymentService,
@@ -28,24 +32,24 @@ export class PaymentResolver {
     private readonly jobService: JobService,
   ) {}
 
-  @Mutation(() => Payment)
+  @Mutation(payment)
   createPayment(
     @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
   ) {
     return this.paymentService.create({ data: createPaymentInput });
   }
 
-  @Query(() => [Payment], { name: 'payments' })
+  @Query(paymentArray, { name: 'payments' })
   findAll() {
     return this.paymentService.findAll();
   }
 
-  @Query(() => Payment, { name: 'payment' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  @Query(payment, { name: 'payment' })
+  findOne(@Args('id', { type: int }) id: number) {
     return this.paymentService.findOne({ where: { id } });
   }
 
-  @Mutation(() => Payment)
+  @Mutation(payment)
   updatePayment(
     @Args('updatePaymentInput') updatePaymentInput: UpdatePaymentInput,
   ) {
@@ -55,8 +59,8 @@ export class PaymentResolver {
     });
   }
 
-  @Mutation(() => Payment)
-  removePayment(@Args('id', { type: () => Int }) id: number) {
+  @Mutation(payment)
+  removePayment(@Args('id', { type: int }) id: number) {
     return this.paymentService.remove({ where: { id } });
   }
 
@@ -69,13 +73,11 @@ export class PaymentResolver {
 
   @ResolveField()
   group(@Parent() payment: Payment) {
-    if (!payment.groupId) return null;
     return this.groupService.findOne({ where: { id: payment.groupId } });
   }
 
   @ResolveField()
   doctor(@Parent() payment: Payment) {
-    if (!payment.doctorId) return null;
     return this.doctorService.findOne({ where: { id: payment.doctorId } });
   }
 

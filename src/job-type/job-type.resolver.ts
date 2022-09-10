@@ -1,12 +1,16 @@
 import {
   Args,
-  Int,
   Mutation,
   Parent,
   Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
+import {
+  int,
+  jobType,
+  jobTypeArray,
+} from '../graphql-type-functions/type-functions';
 import { DoctorService } from '../doctor/doctor.service';
 import { GroupService } from '../group/group.service';
 import { JobService } from '../job/job.service';
@@ -15,7 +19,7 @@ import { UpdateJobTypeInput } from './dto/update-job-type.input';
 import { JobType } from './entities/job-type.entity';
 import { JobTypeService } from './job-type.service';
 
-@Resolver(() => JobType)
+@Resolver(jobType)
 export class JobTypeResolver {
   constructor(
     private readonly jobTypeService: JobTypeService,
@@ -24,24 +28,24 @@ export class JobTypeResolver {
     private readonly jobService: JobService,
   ) {}
 
-  @Mutation(() => JobType)
+  @Mutation(jobType)
   createJobType(
     @Args('createJobTypeInput') createJobTypeInput: CreateJobTypeInput,
   ) {
     return this.jobTypeService.create({ data: createJobTypeInput });
   }
 
-  @Query(() => [JobType], { name: 'jobTypes' })
+  @Query(jobTypeArray, { name: 'jobTypes' })
   findAll() {
     return this.jobTypeService.findAll();
   }
 
-  @Query(() => JobType, { name: 'jobType' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  @Query(jobType, { name: 'jobType' })
+  findOne(@Args('id', { type: int }) id: number) {
     return this.jobTypeService.findOne({ where: { id } });
   }
 
-  @Mutation(() => JobType)
+  @Mutation(jobType)
   updateJobType(
     @Args('updateJobTypeInput') updateJobTypeInput: UpdateJobTypeInput,
   ) {
@@ -51,20 +55,18 @@ export class JobTypeResolver {
     });
   }
 
-  @Mutation(() => JobType)
-  removeJobType(@Args('id', { type: () => Int }) id: number) {
+  @Mutation(jobType)
+  removeJobType(@Args('id', { type: int }) id: number) {
     return this.jobTypeService.remove({ where: { id } });
   }
 
   @ResolveField()
   group(@Parent() jobType: JobType) {
-    if (!jobType.groupId) return null;
     return this.groupService.findOne({ where: { id: jobType.groupId } });
   }
 
   @ResolveField()
   doctor(@Parent() jobType: JobType) {
-    if (!jobType.doctorId) return null;
     return this.doctorService.findOne({ where: { id: jobType.doctorId } });
   }
 

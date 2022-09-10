@@ -1,12 +1,13 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { IsAlpha, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { int } from '../../graphql-type-functions/type-functions';
 
 @InputType()
 export class UpdateClientInput
   implements Prisma.ClientUncheckedUpdateManyInput
 {
-  @Field(() => Int)
+  @Field(int)
   @IsNotEmpty()
   @IsNumber()
   id: number;

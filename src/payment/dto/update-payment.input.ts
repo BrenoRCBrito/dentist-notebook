@@ -1,34 +1,35 @@
-import { Field, Float, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { float, int } from '../../graphql-type-functions/type-functions';
 
 @InputType()
 export class UpdatePaymentInput implements Prisma.PaymentUncheckedUpdateInput {
-  @Field(() => Int)
+  @Field(int)
   @IsNotEmpty()
   @IsNumber()
   id: number;
-  @Field(() => Float)
+  @Field(float)
   @IsOptional()
   @IsNumber()
   value?: number;
-  @Field(() => Int)
+  @Field(int)
   @IsOptional()
   @IsNumber()
   paymentMethodId?: number;
-  @Field(() => Int)
+  @Field(int)
   @IsOptional()
   @IsNumber()
   groupId?: number;
-  @Field(() => Int)
+  @Field(int)
   @IsOptional()
   @IsNumber()
   doctorId?: number;
-  @Field(() => Int)
+  @Field(int)
   @IsOptional()
   @IsNumber()
   clientId?: number;
-  @Field(() => Int)
+  @Field(int)
   @IsOptional()
   @IsNumber()
   jobId?: number;

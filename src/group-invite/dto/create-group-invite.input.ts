@@ -1,6 +1,7 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { int } from '../../graphql-type-functions/type-functions';
 
 @InputType()
 export class CreateGroupInviteInput
@@ -10,11 +11,11 @@ export class CreateGroupInviteInput
   @IsNotEmpty()
   @IsString()
   message: string;
-  @Field(() => Int)
+  @Field(int)
   @IsNotEmpty()
   @IsNumber()
   groupId?: number;
-  @Field(() => Int)
+  @Field(int)
   @IsNotEmpty()
   @IsNumber()
   doctorId?: number;

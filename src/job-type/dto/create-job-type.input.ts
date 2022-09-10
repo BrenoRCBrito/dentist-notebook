@@ -1,6 +1,7 @@
-import { InputType, Int, Field, Float } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { IsAlpha, IsNotEmpty, IsNumber } from 'class-validator';
+import { float, int } from '../../graphql-type-functions/type-functions';
 
 @InputType()
 export class CreateJobTypeInput implements Prisma.JobTypeCreateManyInput {
@@ -8,15 +9,15 @@ export class CreateJobTypeInput implements Prisma.JobTypeCreateManyInput {
   @IsNotEmpty()
   @IsAlpha()
   name: string;
-  @Field(() => Float)
+  @Field(float)
   @IsNotEmpty()
   @IsNumber()
   value: number;
-  @Field(() => Int)
+  @Field(int)
   @IsNotEmpty()
   @IsNumber()
   groupId?: number;
-  @Field(() => Int)
+  @Field(int)
   @IsNotEmpty()
   @IsNumber()
   doctorId?: number;

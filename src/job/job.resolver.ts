@@ -1,23 +1,23 @@
 import {
-  Resolver,
-  Query,
-  Mutation,
   Args,
-  Int,
-  ResolveField,
+  Mutation,
   Parent,
+  Query,
+  ResolveField,
+  Resolver,
 } from '@nestjs/graphql';
-import { JobService } from './job.service';
-import { Job } from './entities/job.entity';
+import { ClientService } from '../client/client.service';
+import { DoctorService } from '../doctor/doctor.service';
+import { int, job, jobArray } from '../graphql-type-functions/type-functions';
+import { GroupService } from '../group/group.service';
+import { JobTypeService } from '../job-type/job-type.service';
+import { PaymentService } from '../payment/payment.service';
 import { CreateJobInput } from './dto/create-job.input';
 import { UpdateJobInput } from './dto/update-job.input';
-import { JobTypeService } from '../job-type/job-type.service';
-import { GroupService } from '../group/group.service';
-import { DoctorService } from '../doctor/doctor.service';
-import { ClientService } from '../client/client.service';
-import { PaymentService } from '../payment/payment.service';
+import { Job } from './entities/job.entity';
+import { JobService } from './job.service';
 
-@Resolver(() => Job)
+@Resolver(job)
 export class JobResolver {
   constructor(
     private readonly jobService: JobService,
@@ -28,22 +28,22 @@ export class JobResolver {
     private readonly paymentService: PaymentService,
   ) {}
 
-  @Mutation(() => Job)
+  @Mutation(job)
   createJob(@Args('createJobInput') createJobInput: CreateJobInput) {
     return this.jobService.create({ data: createJobInput });
   }
 
-  @Query(() => [Job], { name: 'jobs' })
+  @Query(jobArray, { name: 'jobs' })
   findAll() {
     return this.jobService.findAll();
   }
 
-  @Query(() => Job, { name: 'job' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  @Query(job, { name: 'job' })
+  findOne(@Args('id', { type: int }) id: number) {
     return this.jobService.findOne({ where: { id } });
   }
 
-  @Mutation(() => Job)
+  @Mutation(job)
   updateJob(@Args('updateJobInput') updateJobInput: UpdateJobInput) {
     return this.jobService.update({
       where: { id: updateJobInput.id },
@@ -51,8 +51,8 @@ export class JobResolver {
     });
   }
 
-  @Mutation(() => Job)
-  removeJob(@Args('id', { type: () => Int }) id: number) {
+  @Mutation(job)
+  removeJob(@Args('id', { type: int }) id: number) {
     return this.jobService.remove({ where: { id } });
   }
 

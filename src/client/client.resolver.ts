@@ -1,23 +1,27 @@
 import {
   Args,
-  Int,
   Mutation,
   Parent,
   Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import mapManyToManyUpdateInput from '../utils/mapManyToManyUpdateInput';
 import { DoctorService } from '../doctor/doctor.service';
+import {
+  client,
+  clientArray,
+  int,
+} from '../graphql-type-functions/type-functions';
 import { GroupService } from '../group/group.service';
 import { JobService } from '../job/job.service';
 import { PaymentService } from '../payment/payment.service';
+import mapManyToManyUpdateInput from '../utils/mapManyToManyUpdateInput';
 import { ClientService } from './client.service';
 import { CreateClientInput } from './dto/create-client.input';
 import { UpdateClientInput } from './dto/update-client.input';
 import { Client } from './entities/client.entity';
 
-@Resolver(() => Client)
+@Resolver(client)
 export class ClientResolver {
   constructor(
     private readonly clientService: ClientService,
@@ -27,31 +31,31 @@ export class ClientResolver {
     private readonly paymentService: PaymentService,
   ) {}
 
-  @Mutation(() => Client)
+  @Mutation(client)
   createClient(
     @Args('createClientInput') createClientInput: CreateClientInput,
   ) {
     let checkedInput;
     if (
-      Array.isArray(createClientInput.groups) &&
-      createClientInput.groups.length > 0
+      Array.isArray(createClientInput.doctors) &&
+      createClientInput.doctors.length > 0
     ) {
       checkedInput = mapManyToManyUpdateInput(createClientInput);
     } else checkedInput = createClientInput;
     return this.clientService.create({ data: checkedInput });
   }
 
-  @Query(() => [Client], { name: 'clients' })
+  @Query(clientArray, { name: 'clients' })
   findAll() {
     return this.clientService.findAll();
   }
 
-  @Query(() => Client, { name: 'client' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  @Query(client, { name: 'client' })
+  findOne(@Args('id', { type: int }) id: number) {
     return this.clientService.findOne({ where: { id } });
   }
 
-  @Mutation(() => Client)
+  @Mutation(client)
   updateClient(
     @Args('updateClientInput') updateClientInput: UpdateClientInput,
   ) {
@@ -61,8 +65,8 @@ export class ClientResolver {
     });
   }
 
-  @Mutation(() => Client)
-  removeClient(@Args('id', { type: () => Int }) id: number) {
+  @Mutation(client)
+  removeClient(@Args('id', { type: int }) id: number) {
     return this.clientService.remove({ where: { id } });
   }
 

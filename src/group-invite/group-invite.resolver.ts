@@ -1,6 +1,5 @@
 import {
   Args,
-  Int,
   Mutation,
   Parent,
   Query,
@@ -8,13 +7,18 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { DoctorService } from '../doctor/doctor.service';
+import {
+  groupInvite,
+  groupInviteArray,
+  int,
+} from '../graphql-type-functions/type-functions';
 import { GroupService } from '../group/group.service';
 import { CreateGroupInviteInput } from './dto/create-group-invite.input';
 import { UpdateGroupInviteInput } from './dto/update-group-invite.input';
 import { GroupInvite } from './entities/group-invite.entity';
 import { GroupInviteService } from './group-invite.service';
 
-@Resolver(() => GroupInvite)
+@Resolver(groupInvite)
 export class GroupInviteResolver {
   constructor(
     private readonly groupInviteService: GroupInviteService,
@@ -22,7 +26,7 @@ export class GroupInviteResolver {
     private readonly doctorService: DoctorService,
   ) {}
 
-  @Mutation(() => GroupInvite)
+  @Mutation(groupInvite)
   createGroupInvite(
     @Args('createGroupInviteInput')
     createGroupInviteInput: CreateGroupInviteInput,
@@ -30,17 +34,17 @@ export class GroupInviteResolver {
     return this.groupInviteService.create({ data: createGroupInviteInput });
   }
 
-  @Query(() => [GroupInvite], { name: 'groupInvites' })
+  @Query(groupInviteArray, { name: 'groupInvites' })
   findAll() {
     return this.groupInviteService.findAll();
   }
 
-  @Query(() => GroupInvite, { name: 'groupInvite' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  @Query(groupInvite, { name: 'groupInvite' })
+  findOne(@Args('id', { type: int }) id: number) {
     return this.groupInviteService.findOne({ where: { id } });
   }
 
-  @Mutation(() => GroupInvite)
+  @Mutation(groupInvite)
   updateGroupInvite(
     @Args('updateGroupInviteInput')
     updateGroupInviteInput: UpdateGroupInviteInput,
@@ -51,8 +55,8 @@ export class GroupInviteResolver {
     });
   }
 
-  @Mutation(() => GroupInvite)
-  removeGroupInvite(@Args('id', { type: () => Int }) id: number) {
+  @Mutation(groupInvite)
+  removeGroupInvite(@Args('id', { type: int }) id: number) {
     return this.groupInviteService.remove({ where: { id } });
   }
 
