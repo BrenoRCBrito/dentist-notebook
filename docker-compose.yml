@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+  application:
+    build: .
+    # restart: on-failure
+    ports:
+      - 3001:3001
+    environment:
+      WAIT_HOSTS: db:5432
+      DATABASE_URL: postgresql://postgres:password@db:5432
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: password
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
