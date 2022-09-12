@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JobService } from './job.service';
 import { JobResolver } from './job.resolver';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { JobTypeService } from '../job-type/job-type.service';
 import { GroupService } from '../group/group.service';
 import { DoctorService } from '../doctor/doctor.service';

@@ -1,34 +1,27 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, Int, ObjectType } from '@nestjs/graphql';
 import { Doctor } from '../../doctor/entities/doctor.entity';
-import {
-  groupArray,
-  int,
-  isoDateTime,
-  jobArray,
-  paymentArray,
-} from '../../graphql-type-functions/type-functions';
 import { Group } from '../../group/entities/group.entity';
 import { Job } from '../../job/entities/job.entity';
 import { Payment } from '../../payment/entities/payment.entity';
 
 @ObjectType()
 export class Client {
-  @Field(int)
+  @Field(() => Int)
   id: number;
-  @Field(isoDateTime)
+  @Field(() => GraphQLISODateTime)
   createdAt: Date;
-  @Field(isoDateTime)
+  @Field(() => GraphQLISODateTime)
   updatedAt: Date;
   @Field()
   name: string;
   @Field()
   lastName: string;
-  @Field(groupArray, { nullable: 'itemsAndList' })
+  @Field(() => [Group], { nullable: 'itemsAndList' })
   groups: Group[];
-  @Field(groupArray, { nullable: 'itemsAndList' })
+  @Field(() => [Doctor], { nullable: 'itemsAndList' })
   doctors: Doctor[];
-  @Field(jobArray, { nullable: 'items' })
+  @Field(() => [Job], { nullable: 'items' })
   jobs: Job[];
-  @Field(paymentArray, { nullable: 'items' })
+  @Field(() => [Payment], { nullable: 'items' })
   payments: Payment[];
 }

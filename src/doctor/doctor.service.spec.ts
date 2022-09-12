@@ -7,7 +7,7 @@ import {
   updatedDoctor2,
   updateDoctor2Input,
 } from '../../mock/doctor';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { DoctorService } from './doctor.service';
 
 const results = {

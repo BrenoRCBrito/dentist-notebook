@@ -1,7 +1,6 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, Float, InputType, Int } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { float, int } from '../../graphql-type-functions/type-functions';
 
 @InputType()
 export class CreatePaymentMethodInput
@@ -11,19 +10,19 @@ export class CreatePaymentMethodInput
   @IsNotEmpty()
   @IsString()
   name: string;
-  @Field(float)
+  @Field(() => Float)
   @IsNotEmpty()
   @IsNumber()
   discountPercentage?: number;
-  @Field(float)
+  @Field(() => Float)
   @IsNotEmpty()
   @IsNumber()
   feePercentage?: number;
-  @Field(int)
+  @Field(() => Int)
   @IsNotEmpty()
   @IsNumber()
   groupId?: number;
-  @Field(int)
+  @Field(() => Int)
   @IsNotEmpty()
   @IsNumber()
   doctorId?: number;

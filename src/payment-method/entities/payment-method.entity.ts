@@ -1,38 +1,36 @@
-import { Field, ObjectType } from '@nestjs/graphql';
-import { Doctor } from '../../doctor/entities/doctor.entity';
 import {
-  doctor,
-  float,
-  group,
-  int,
-  isoDateTime,
-  paymentArray,
-} from '../../graphql-type-functions/type-functions';
+  Field,
+  Float,
+  GraphQLISODateTime,
+  Int,
+  ObjectType,
+} from '@nestjs/graphql';
+import { Doctor } from '../../doctor/entities/doctor.entity';
 import { Group } from '../../group/entities/group.entity';
 import { Payment } from '../../payment/entities/payment.entity';
 
 @ObjectType()
 export class PaymentMethod {
-  @Field(int)
+  @Field(() => Int)
   id: number;
-  @Field(isoDateTime)
+  @Field(() => GraphQLISODateTime)
   createdAt: Date;
-  @Field(isoDateTime)
+  @Field(() => GraphQLISODateTime)
   updatedAt: Date;
   @Field()
   name: string;
-  @Field(float)
+  @Field(() => Float)
   discountPercentage: number;
-  @Field(float)
+  @Field(() => Float)
   feePercentage: number;
-  @Field(group, { nullable: true })
+  @Field(() => Group, { nullable: true })
   group: Group;
-  @Field(int, { nullable: true })
+  @Field(() => Int, { nullable: true })
   groupId: number;
-  @Field(doctor, { nullable: true })
+  @Field(() => Doctor, { nullable: true })
   doctor: Doctor;
-  @Field(int, { nullable: true })
+  @Field(() => Int, { nullable: true })
   doctorId: number;
-  @Field(paymentArray)
+  @Field(() => [Payment])
   payments: Payment[];
 }

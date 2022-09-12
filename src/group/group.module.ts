@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { GroupResolver } from './group.resolver';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { DoctorService } from '../doctor/doctor.service';
 import { ClientService } from '../client/client.service';
 import { JobService } from '../job/job.service';

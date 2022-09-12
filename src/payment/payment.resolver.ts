@@ -1,5 +1,6 @@
 import {
   Args,
+  Int,
   Mutation,
   Parent,
   Query,
@@ -8,11 +9,6 @@ import {
 } from '@nestjs/graphql';
 import { ClientService } from '../client/client.service';
 import { DoctorService } from '../doctor/doctor.service';
-import {
-  int,
-  payment,
-  paymentArray,
-} from '../graphql-type-functions/type-functions';
 import { GroupService } from '../group/group.service';
 import { JobService } from '../job/job.service';
 import { PaymentMethodService } from '../payment-method/payment-method.service';
@@ -21,7 +17,7 @@ import { UpdatePaymentInput } from './dto/update-payment.input';
 import { Payment } from './entities/payment.entity';
 import { PaymentService } from './payment.service';
 
-@Resolver(payment)
+@Resolver(() => Payment)
 export class PaymentResolver {
   constructor(
     private readonly paymentService: PaymentService,
@@ -32,24 +28,24 @@ export class PaymentResolver {
     private readonly jobService: JobService,
   ) {}
 
-  @Mutation(payment)
+  @Mutation(() => Payment)
   createPayment(
     @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
   ) {
     return this.paymentService.create({ data: createPaymentInput });
   }
 
-  @Query(paymentArray, { name: 'payments' })
+  @Query(() => [Payment], { name: 'payments' })
   findAll() {
     return this.paymentService.findAll();
   }
 
-  @Query(payment, { name: 'payment' })
-  findOne(@Args('id', { type: int }) id: number) {
+  @Query(() => Payment, { name: 'payment' })
+  findOne(@Args('id', { type: () => Int }) id: number) {
     return this.paymentService.findOne({ where: { id } });
   }
 
-  @Mutation(payment)
+  @Mutation(() => Payment)
   updatePayment(
     @Args('updatePaymentInput') updatePaymentInput: UpdatePaymentInput,
   ) {
@@ -59,8 +55,8 @@ export class PaymentResolver {
     });
   }
 
-  @Mutation(payment)
-  removePayment(@Args('id', { type: int }) id: number) {
+  @Mutation(() => Payment)
+  removePayment(@Args('id', { type: () => Int }) id: number) {
     return this.paymentService.remove({ where: { id } });
   }
 

@@ -9,7 +9,7 @@ import {
   updatedRefreshToken2,
   updateManyRefreshToken,
 } from '../../mock/refresh-token';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { RefreshTokenService } from './refresh-token.service';
 
 const results = {

@@ -7,7 +7,7 @@ import {
   updatedJob2,
   updateJob2Input,
 } from '../../mock/job';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { JobService } from './job.service';
 
 const results = {

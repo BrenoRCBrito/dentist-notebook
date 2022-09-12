@@ -1,32 +1,26 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, Int, ObjectType } from '@nestjs/graphql';
 import { InviteStatus } from '@prisma/client';
-import {
-  doctor,
-  group,
-  int,
-  isoDateTime,
-} from '../../graphql-type-functions/type-functions';
 import { Doctor } from '../../doctor/entities/doctor.entity';
 import { Group } from '../../group/entities/group.entity';
 
 @ObjectType()
 export class GroupInvite {
-  @Field(int)
+  @Field(() => Int)
   id: number;
-  @Field(isoDateTime)
+  @Field(() => GraphQLISODateTime)
   createdAt: Date;
-  @Field(isoDateTime)
+  @Field(() => GraphQLISODateTime)
   updatedAt: Date;
   @Field()
   message: string;
   @Field()
   status: InviteStatus;
-  @Field(group)
+  @Field(() => Group)
   group: Group;
-  @Field(int)
+  @Field(() => Int)
   groupId: number;
-  @Field(doctor)
+  @Field(() => Doctor)
   doctor: Doctor;
-  @Field(int)
+  @Field(() => Int)
   doctorId: number;
 }

@@ -1,16 +1,5 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, Int, ObjectType } from '@nestjs/graphql';
 import { Client } from '../../client/entities/client.entity';
-import {
-  clientArray,
-  groupArray,
-  groupInviteArray,
-  int,
-  isoDateTime,
-  jobArray,
-  jobTypeArray,
-  paymentArray,
-  paymentMethodArray,
-} from '../../graphql-type-functions/type-functions';
 import { GroupInvite } from '../../group-invite/entities/group-invite.entity';
 import { Group } from '../../group/entities/group.entity';
 import { JobType } from '../../job-type/entities/job-type.entity';
@@ -20,11 +9,11 @@ import { Payment } from '../../payment/entities/payment.entity';
 
 @ObjectType()
 export class Doctor {
-  @Field(int)
+  @Field(() => Int)
   id: number;
-  @Field(isoDateTime)
+  @Field(() => GraphQLISODateTime)
   createdAt: Date;
-  @Field(isoDateTime)
+  @Field(() => GraphQLISODateTime)
   updatedAt: Date;
   @Field()
   name: string;
@@ -34,20 +23,20 @@ export class Doctor {
   email: string;
   @Field()
   password: string;
-  @Field(groupArray, { nullable: 'items' })
+  @Field(() => [Group], { nullable: 'items' })
   groups: Group[];
-  @Field(groupArray, { nullable: 'items' })
+  @Field(() => [Group], { nullable: 'items' })
   managedGroups: Group[];
-  @Field(clientArray, { nullable: 'items' })
+  @Field(() => [Client], { nullable: 'items' })
   clients: Client[];
-  @Field(jobArray, { nullable: 'items' })
+  @Field(() => [Job], { nullable: 'items' })
   jobs: Job[];
-  @Field(paymentMethodArray, { nullable: 'items' })
+  @Field(() => [PaymentMethod], { nullable: 'items' })
   paymentMethods: PaymentMethod[];
-  @Field(paymentArray, { nullable: 'items' })
+  @Field(() => [Payment], { nullable: 'items' })
   payments: Payment[];
-  @Field(jobTypeArray, { nullable: 'items' })
+  @Field(() => [JobType], { nullable: 'items' })
   jobTypes: JobType[];
-  @Field(groupInviteArray, { nullable: 'items' })
+  @Field(() => [GroupInvite], { nullable: 'items' })
   groupInvites: GroupInvite[];
 }

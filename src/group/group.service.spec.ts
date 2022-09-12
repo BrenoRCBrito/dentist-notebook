@@ -7,7 +7,7 @@ import {
   updatedGroup2,
   updateGroup2Input,
 } from '../../mock/group';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { GroupService } from './group.service';
 
 const results = {

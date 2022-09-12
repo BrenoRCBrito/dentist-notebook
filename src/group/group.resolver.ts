@@ -1,5 +1,6 @@
 import {
   Args,
+  Int,
   Mutation,
   Parent,
   Query,
@@ -8,11 +9,6 @@ import {
 } from '@nestjs/graphql';
 import { ClientService } from '../client/client.service';
 import { DoctorService } from '../doctor/doctor.service';
-import {
-  group,
-  groupArray,
-  int,
-} from '../graphql-type-functions/type-functions';
 import { GroupInviteService } from '../group-invite/group-invite.service';
 import { JobTypeService } from '../job-type/job-type.service';
 import { JobService } from '../job/job.service';
@@ -23,7 +19,7 @@ import { UpdateGroupInput } from './dto/update-group.input';
 import { Group } from './entities/group.entity';
 import { GroupService } from './group.service';
 
-@Resolver(group)
+@Resolver(() => Group)
 export class GroupResolver {
   constructor(
     private readonly groupService: GroupService,
@@ -36,22 +32,22 @@ export class GroupResolver {
     private readonly groupInviteService: GroupInviteService,
   ) {}
 
-  @Mutation(group)
+  @Mutation(() => Group)
   createGroup(@Args('createGroupInput') createGroupInput: CreateGroupInput) {
     return this.groupService.create({ data: createGroupInput });
   }
 
-  @Query(groupArray, { name: 'groups' })
+  @Query(() => [Group], { name: 'groups' })
   findAll() {
     return this.groupService.findAll();
   }
 
-  @Query(group, { name: 'group' })
-  findOne(@Args('id', { type: int }) id: number) {
+  @Query(() => Group, { name: 'group' })
+  findOne(@Args('id', { type: () => Int }) id: number) {
     return this.groupService.findOne({ where: { id } });
   }
 
-  @Mutation(group)
+  @Mutation(() => Group)
   updateGroup(@Args('updateGroupInput') updateGroupInput: UpdateGroupInput) {
     return this.groupService.update({
       where: { id: updateGroupInput.id },
@@ -59,8 +55,8 @@ export class GroupResolver {
     });
   }
 
-  @Mutation(group)
-  removeGroup(@Args('id', { type: int }) id: number) {
+  @Mutation(() => Group)
+  removeGroup(@Args('id', { type: () => Int }) id: number) {
     return this.groupService.remove({ where: { id } });
   }
 

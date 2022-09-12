@@ -1,7 +1,6 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, Int } from '@nestjs/graphql';
 import { Prisma } from '@prisma/client';
 import { IsAlpha, IsArray, IsNotEmpty, IsNumber } from 'class-validator';
-import { intArray } from '../../graphql-type-functions/type-functions';
 
 interface SimplifyRelationFields {
   //  The original prisma object shape for connecting Many to Many rows is:
@@ -26,12 +25,12 @@ export class CreateClientInput
   @IsNotEmpty()
   @IsAlpha()
   lastName: string;
-  @Field(intArray, { defaultValue: [0] })
+  @Field(() => [Int], { defaultValue: [0] })
   @IsNotEmpty()
   @IsArray()
   @IsNumber({}, { each: true })
   groups?: number[];
-  @Field(intArray, { defaultValue: [0] })
+  @Field(() => [Int], { defaultValue: [0] })
   @IsNotEmpty()
   @IsArray()
   @IsNumber({}, { each: true })

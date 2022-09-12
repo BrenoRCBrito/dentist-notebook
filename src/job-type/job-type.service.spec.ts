@@ -7,7 +7,7 @@ import {
   updatedJobType2,
   updateJobType2Input,
 } from '../../mock/job-type';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { JobTypeService } from './job-type.service';
 
 const results = {

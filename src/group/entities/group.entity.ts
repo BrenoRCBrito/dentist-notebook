@@ -1,18 +1,6 @@
-import { Field, ObjectType } from '@nestjs/graphql';
+import { Field, GraphQLISODateTime, Int, ObjectType } from '@nestjs/graphql';
 import { Client } from '../../client/entities/client.entity';
 import { Doctor } from '../../doctor/entities/doctor.entity';
-import {
-  clientArray,
-  doctor,
-  doctorArray,
-  groupInviteArray,
-  int,
-  isoDateTime,
-  jobArray,
-  jobTypeArray,
-  paymentArray,
-  paymentMethodArray,
-} from '../../graphql-type-functions/type-functions';
 import { GroupInvite } from '../../group-invite/entities/group-invite.entity';
 import { JobType } from '../../job-type/entities/job-type.entity';
 import { Job } from '../../job/entities/job.entity';
@@ -21,30 +9,30 @@ import { Payment } from '../../payment/entities/payment.entity';
 
 @ObjectType()
 export class Group {
-  @Field(int)
+  @Field(() => Int)
   id: number;
-  @Field(isoDateTime)
+  @Field(() => GraphQLISODateTime)
   createdAt: Date;
-  @Field(isoDateTime)
-  updatedAt;
+  @Field(() => GraphQLISODateTime)
+  updatedAt: Date;
   @Field()
   name: string;
-  @Field(doctor)
+  @Field(() => Doctor)
   admin: Doctor;
-  @Field(int)
+  @Field(() => Int)
   adminId: number;
-  @Field(doctorArray, { nullable: 'items' })
+  @Field(() => [Doctor], { nullable: 'items' })
   doctors: Doctor[];
-  @Field(clientArray, { nullable: 'items' })
+  @Field(() => [Client], { nullable: 'items' })
   clients: Client[];
-  @Field(jobArray, { nullable: 'items' })
+  @Field(() => [Job], { nullable: 'items' })
   jobs: Job[];
-  @Field(paymentMethodArray, { nullable: 'items' })
+  @Field(() => [PaymentMethod], { nullable: 'items' })
   paymentMethods: PaymentMethod[];
-  @Field(paymentArray, { nullable: 'items' })
+  @Field(() => [Payment], { nullable: 'items' })
   payments: Payment[];
-  @Field(jobTypeArray, { nullable: 'items' })
+  @Field(() => [JobType], { nullable: 'items' })
   jobTypes: JobType[];
-  @Field(groupInviteArray, { nullable: 'items' })
+  @Field(() => [GroupInvite], { nullable: 'items' })
   invites: GroupInvite[];
 }

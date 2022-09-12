@@ -1,16 +1,12 @@
 import {
   Args,
+  Int,
   Mutation,
   Parent,
   Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import {
-  int,
-  paymentMethod,
-  paymentMethodArray,
-} from '../graphql-type-functions/type-functions';
 import { DoctorService } from '../doctor/doctor.service';
 import { GroupService } from '../group/group.service';
 import { PaymentService } from '../payment/payment.service';
@@ -19,7 +15,7 @@ import { UpdatePaymentMethodInput } from './dto/update-payment-method.input';
 import { PaymentMethod } from './entities/payment-method.entity';
 import { PaymentMethodService } from './payment-method.service';
 
-@Resolver(paymentMethod)
+@Resolver(() => PaymentMethod)
 export class PaymentMethodResolver {
   constructor(
     private readonly paymentMethodService: PaymentMethodService,
@@ -28,7 +24,7 @@ export class PaymentMethodResolver {
     private readonly paymentService: PaymentService,
   ) {}
 
-  @Mutation(paymentMethod)
+  @Mutation(() => PaymentMethod)
   createPaymentMethod(
     @Args('createPaymentMethodInput')
     createPaymentMethodInput: CreatePaymentMethodInput,
@@ -36,17 +32,17 @@ export class PaymentMethodResolver {
     return this.paymentMethodService.create({ data: createPaymentMethodInput });
   }
 
-  @Query(paymentMethodArray, { name: 'paymentMethods' })
+  @Query(() => [PaymentMethod], { name: 'paymentMethods' })
   findAll() {
     return this.paymentMethodService.findAll();
   }
 
-  @Query(paymentMethod, { name: 'paymentMethod' })
-  findOne(@Args('id', { type: int }) id: number) {
+  @Query(() => PaymentMethod, { name: 'paymentMethod' })
+  findOne(@Args('id', { type: () => Int }) id: number) {
     return this.paymentMethodService.findOne({ where: { id } });
   }
 
-  @Mutation(paymentMethod)
+  @Mutation(() => PaymentMethod)
   updatePaymentMethod(
     @Args('updatePaymentMethodInput')
     updatePaymentMethodInput: UpdatePaymentMethodInput,
@@ -57,8 +53,8 @@ export class PaymentMethodResolver {
     });
   }
 
-  @Mutation(paymentMethod)
-  removePaymentMethod(@Args('id', { type: int }) id: number) {
+  @Mutation(() => PaymentMethod)
+  removePaymentMethod(@Args('id', { type: () => Int }) id: number) {
     return this.paymentMethodService.remove({ where: { id } });
   }
 

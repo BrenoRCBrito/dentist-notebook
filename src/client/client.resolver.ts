@@ -1,5 +1,6 @@
 import {
   Args,
+  Int,
   Mutation,
   Parent,
   Query,
@@ -7,11 +8,6 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { DoctorService } from '../doctor/doctor.service';
-import {
-  client,
-  clientArray,
-  int,
-} from '../graphql-type-functions/type-functions';
 import { GroupService } from '../group/group.service';
 import { JobService } from '../job/job.service';
 import { PaymentService } from '../payment/payment.service';
@@ -21,7 +17,7 @@ import { CreateClientInput } from './dto/create-client.input';
 import { UpdateClientInput } from './dto/update-client.input';
 import { Client } from './entities/client.entity';
 
-@Resolver(client)
+@Resolver(() => Client)
 export class ClientResolver {
   constructor(
     private readonly clientService: ClientService,
@@ -31,7 +27,7 @@ export class ClientResolver {
     private readonly paymentService: PaymentService,
   ) {}
 
-  @Mutation(client)
+  @Mutation(() => Client)
   createClient(
     @Args('createClientInput') createClientInput: CreateClientInput,
   ) {
@@ -45,17 +41,17 @@ export class ClientResolver {
     return this.clientService.create({ data: checkedInput });
   }
 
-  @Query(clientArray, { name: 'clients' })
+  @Query(() => [Client], { name: 'clients' })
   findAll() {
     return this.clientService.findAll();
   }
 
-  @Query(client, { name: 'client' })
-  findOne(@Args('id', { type: int }) id: number) {
+  @Query(() => Client, { name: 'client' })
+  findOne(@Args('id', { type: () => Int }) id: number) {
     return this.clientService.findOne({ where: { id } });
   }
 
-  @Mutation(client)
+  @Mutation(() => Client)
   updateClient(
     @Args('updateClientInput') updateClientInput: UpdateClientInput,
   ) {
@@ -65,8 +61,8 @@ export class ClientResolver {
     });
   }
 
-  @Mutation(client)
-  removeClient(@Args('id', { type: int }) id: number) {
+  @Mutation(() => Client)
+  removeClient(@Args('id', { type: () => Int }) id: number) {
     return this.clientService.remove({ where: { id } });
   }
 

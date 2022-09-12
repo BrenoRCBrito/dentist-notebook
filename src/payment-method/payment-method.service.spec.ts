@@ -7,7 +7,7 @@ import {
   updatedPaymentMethod2,
   updatePaymentMethod2Input,
 } from '../../mock/payment-method';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { PaymentMethodService } from './payment-method.service';
 
 const results = {

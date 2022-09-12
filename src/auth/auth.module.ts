@@ -6,7 +6,7 @@ import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { AccessTokenStrategy } from './passport-strategy/access-token.strategy';
 import { RefreshTokenStrategy } from './passport-strategy/refresh-token.strategy';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Module({
   imports: [JwtModule.register({})],

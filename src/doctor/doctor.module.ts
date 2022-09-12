@@ -5,7 +5,7 @@ import { JobTypeService } from '../job-type/job-type.service';
 import { JobService } from '../job/job.service';
 import { PaymentMethodService } from '../payment-method/payment-method.service';
 import { PaymentService } from '../payment/payment.service';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { ClientService } from '../client/client.service';
 import { DoctorResolver } from './doctor.resolver';
 import { DoctorService } from './doctor.service';

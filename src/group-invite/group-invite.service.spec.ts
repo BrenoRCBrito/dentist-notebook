@@ -7,7 +7,7 @@ import {
   updatedGroupInvite2,
   updateGroupInvite2Input,
 } from '../../mock/group-invite';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { GroupInviteService } from './group-invite.service';
 
 const results = {
