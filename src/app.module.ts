@@ -14,6 +14,7 @@ import { JobModule } from './job/job.module';
 import { PaymentMethodModule } from './payment-method/payment-method.module';
 import { PaymentModule } from './payment/payment.module';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -21,6 +22,9 @@ import { RefreshTokenService } from './refresh-token/refresh-token.service';
       playground: false,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
     AuthModule,
     GroupModule,

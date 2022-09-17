@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:current-alpine3.15
 RUN mkdir /app
 WORKDIR /app
 RUN mkdir /app/prisma

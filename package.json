@@ -18,12 +18,19 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "dotenv -e .env.test -- jest --config ./test/jest-e2e.json",
+    "db:start": "docker compose up db -d && npx prisma db push",
+    "db:delete": "docker compose rm db -s -f -v",
+    "db:restart": "yarn db:delete && yarn db:start",
+    "test:db:start": "docker compose up test-db -d && yarn dotenv -e .env.test npx prisma db push",
+    "test:db:delete": "docker compose rm test-db -s -f -v",
+    "test:db:restart": "yarn test:db:delete && yarn test:db:start"
   },
   "dependencies": {
     "@golevelup/ts-jest": "^0.3.3",
     "@nestjs/apollo": "^10.0.22",
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/graphql": "^10.0.22",
     "@nestjs/jwt": "^9.0.0",
@@ -53,6 +60,7 @@
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "dotenv-cli": "^6.0.0",
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
