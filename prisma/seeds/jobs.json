@@ -1,0 +1,28 @@
+[
+  {
+    "notes": "Segunda manuntenção",
+    "installmentValue": 50,
+    "jobTypeId": 1,
+    "doctorId": 2,
+    "clientId": 1,
+    "groupId": 1
+  },
+  {
+    "notes": "Aparelho Rosa",
+    "installmentsNumber": 4,
+    "installmentValue": 100,
+    "jobTypeId": 2,
+    "doctorId": 1,
+    "clientId": 1,
+    "groupId": 1
+  },
+  {
+    "notes": "",
+    "installmentsNumber": 4,
+    "installmentValue": 150,
+    "jobTypeId": 4,
+    "doctorId": 2,
+    "clientId": 2,
+    "groupId": null
+  }
+]

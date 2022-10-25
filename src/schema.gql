@@ -1,0 +1,299 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type PaymentMethod {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  discountPercentage: Float!
+  feePercentage: Float!
+  group: Group
+  groupId: Int
+  doctor: Doctor
+  doctorId: Int
+  payments: [Payment!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Payment {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  value: Float!
+  method: PaymentMethod!
+  paymentMethodId: Int!
+  group: Group
+  groupId: Int
+  doctor: Doctor
+  doctorId: Int
+  client: Client!
+  clientId: Int!
+  job: Job!
+  jobId: Int!
+}
+
+type Job {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  notes: String!
+  installmentsNumber: Float!
+  installmentValue: Float!
+  paidInstallments: Float!
+  jobType: JobType!
+  jobTypeId: Int!
+  group: Group
+  groupId: Int
+  doctor: Doctor!
+  doctorId: Int!
+  client: Client!
+  clientId: Int!
+  payments: [Payment]!
+}
+
+type JobType {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  value: Float!
+  group: Group
+  groupId: Int
+  doctor: Doctor
+  doctorId: Int
+  jobs: [Job]!
+}
+
+type Group {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  admin: Doctor!
+  adminId: Int!
+  doctors: [Doctor]!
+  clients: [Client]!
+  jobs: [Job]!
+  paymentMethods: [PaymentMethod]!
+  payments: [Payment]!
+  jobTypes: [JobType]!
+  invites: [GroupInvite]!
+}
+
+type GroupInvite {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  message: String!
+  status: String!
+  group: Group!
+  groupId: Int!
+  doctor: Doctor!
+  doctorId: Int!
+}
+
+type Doctor {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  lastName: String!
+  email: String!
+  password: String!
+  groups: [Group]!
+  managedGroups: [Group]!
+  clients: [Client]!
+  jobs: [Job]!
+  paymentMethods: [PaymentMethod]!
+  payments: [Payment]!
+  jobTypes: [JobType]!
+  groupInvites: [GroupInvite]!
+}
+
+type Client {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  lastName: String!
+  groups: [Group]
+  doctors: [Doctor]
+  jobs: [Job]!
+  payments: [Payment]!
+}
+
+type Query {
+  groups: [Group!]!
+  group(id: Int!): Group!
+  doctors: [Doctor!]!
+  doctor(id: Int!): Doctor!
+  groupInvites: [GroupInvite!]!
+  groupInvite(id: Int!): GroupInvite!
+  clients: [Client!]!
+  client(id: Int!): Client!
+  jobs: [Job!]!
+  job(id: Int!): Job!
+  jobTypes: [JobType!]!
+  jobType(id: Int!): JobType!
+  payments: [Payment!]!
+  payment(id: Int!): Payment!
+  paymentMethods: [PaymentMethod!]!
+  paymentMethod(id: Int!): PaymentMethod!
+}
+
+type Mutation {
+  createGroup(createGroupInput: CreateGroupInput!): Group!
+  updateGroup(updateGroupInput: UpdateGroupInput!): Group!
+  removeGroup(id: Int!): Group!
+  createDoctor(createDoctorInput: CreateDoctorInput!): Doctor!
+  updateDoctor(updateDoctorInput: UpdateDoctorInput!): Doctor!
+  removeDoctor(id: Int!): Doctor!
+  createGroupInvite(createGroupInviteInput: CreateGroupInviteInput!): GroupInvite!
+  updateGroupInvite(updateGroupInviteInput: UpdateGroupInviteInput!): GroupInvite!
+  removeGroupInvite(id: Int!): GroupInvite!
+  createClient(createClientInput: CreateClientInput!): Client!
+  updateClient(updateClientInput: UpdateClientInput!): Client!
+  removeClient(id: Int!): Client!
+  createJob(createJobInput: CreateJobInput!): Job!
+  updateJob(updateJobInput: UpdateJobInput!): Job!
+  removeJob(id: Int!): Job!
+  createJobType(createJobTypeInput: CreateJobTypeInput!): JobType!
+  updateJobType(updateJobTypeInput: UpdateJobTypeInput!): JobType!
+  removeJobType(id: Int!): JobType!
+  createPayment(createPaymentInput: CreatePaymentInput!): Payment!
+  updatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
+  removePayment(id: Int!): Payment!
+  createPaymentMethod(createPaymentMethodInput: CreatePaymentMethodInput!): PaymentMethod!
+  updatePaymentMethod(updatePaymentMethodInput: UpdatePaymentMethodInput!): PaymentMethod!
+  removePaymentMethod(id: Int!): PaymentMethod!
+}
+
+input CreateGroupInput {
+  id: Int!
+  name: String!
+  adminId: Int!
+}
+
+input UpdateGroupInput {
+  id: Int!
+  name: String!
+  adminId: Int!
+}
+
+input CreateDoctorInput {
+  name: String!
+  lastName: String!
+  email: String!
+  password: String!
+}
+
+input UpdateDoctorInput {
+  id: Int!
+  name: String
+  lastName: String
+  email: String
+  password: String
+  groups: [Int]
+}
+
+input CreateGroupInviteInput {
+  message: String!
+  status: String!
+  groupId: Int!
+  doctorId: Int!
+}
+
+input UpdateGroupInviteInput {
+  id: Int!
+  status: String!
+}
+
+input CreateClientInput {
+  name: String!
+  lastName: String!
+  groups: [Int!]!
+  doctors: [Int!]!
+}
+
+input UpdateClientInput {
+  id: Int!
+  name: String!
+  lastName: String!
+}
+
+input CreateJobInput {
+  notes: String!
+  installmentsNumber: Float!
+  installmentValue: Float!
+  paidInstallments: Float!
+  jobTypeId: Int!
+  groupId: Int!
+  doctorId: Int!
+  clientId: Int!
+}
+
+input UpdateJobInput {
+  id: Int!
+  notes: String!
+  installmentsNumber: Float!
+  installmentValue: Float!
+  paidInstallments: Float!
+  jobTypeId: Int!
+  doctorId: Int!
+  clientId: Int!
+}
+
+input CreateJobTypeInput {
+  name: String!
+  value: Float!
+  groupId: Int!
+  doctorId: Int!
+}
+
+input UpdateJobTypeInput {
+  id: Int!
+  name: String!
+  value: Float!
+}
+
+input CreatePaymentInput {
+  value: Float!
+  paymentMethodId: Int!
+  groupId: Int!
+  doctorId: Int!
+  clientId: Int!
+  jobId: Int!
+}
+
+input UpdatePaymentInput {
+  id: Int!
+  value: Float!
+  paymentMethodId: Int!
+  groupId: Int!
+  doctorId: Int!
+  clientId: Int!
+  jobId: Int!
+}
+
+input CreatePaymentMethodInput {
+  name: String!
+  discountPercentage: Float!
+  feePercentage: Float!
+  groupId: Int!
+  doctorId: Int!
+}
+
+input UpdatePaymentMethodInput {
+  id: Int!
+  name: String!
+  discountPercentage: Float!
+  feePercentage: Float!
+  groupId: Int!
+  doctorId: Int!
+}

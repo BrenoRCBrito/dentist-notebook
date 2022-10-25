@@ -1,0 +1,24 @@
+[
+  {
+    "paymentMethodId": 1,
+    "value": 50,
+    "clientId": 1,
+    "jobId": 1,
+    "groupId": 1
+  },
+  {
+    "paymentMethodId": 2,
+    "value": 100,
+    "clientId": 1,
+    "jobId": 2,
+    "groupId": 1
+  },
+  {
+    "paymentMethodId": 3,
+    "value": 150,
+    "clientId": 2,
+    "jobId": 3,
+    "doctorId": 2,
+    "groupId": null
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Manutenção de aparelho",
+    "groupId": 1,
+    "value": 50
+  },
+  {
+    "name": "Montagem de aparelho comum",
+    "groupId": 1,
+    "value": 400
+  },
+  {
+    "name": "Montagem de aparelho estético",
+    "groupId": 1,
+    "value": 600
+  },
+  {
+    "name": "Montagem de aparelho comum",
+    "doctorId": 2,
+    "value": 500
+  }
+]

@@ -1,0 +1,21 @@
+[
+  {
+    "name": "Fernanda",
+    "lastName": "Monteiro",
+    "email": "fernandamonteiro@algo.com",
+    "password": "fernandamonteiro",
+    "groups": { "connect": { "id": 1 } }
+  },
+  {
+    "name": "André",
+    "lastName": "Fernandes",
+    "email": "andrefernandes@algo.com",
+    "password": "andrefernandes"
+  },
+  {
+    "name": "Márcia",
+    "lastName": "Abraão",
+    "email": "marciabraao@algo.com",
+    "password": "marciabraao"
+  }
+]

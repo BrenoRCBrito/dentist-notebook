@@ -1,0 +1,155 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum InviteStatus {
+  ACCEPTED
+  REJECTED
+  WAITING
+}
+
+enum TokenStatus {
+  VALID
+  INVALID
+}
+
+model Group {
+  id             Int             @id @default(autoincrement())
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  name           String
+  admin          Doctor          @relation(name: "admin", fields: [adminId], references: [id])
+  adminId        Int             @unique
+  doctors        Doctor[]        @relation(name: "members")
+  clients        Client[]
+  jobs           Job[]
+  paymentMethods PaymentMethod[]
+  payments       Payment[]
+  jobTypes       JobType[]
+  invites        GroupInvite[]
+}
+
+model Doctor {
+  id             Int             @id @default(autoincrement())
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  name           String
+  lastName       String
+  email          String          @unique
+  password       String
+  refreshTokens  RefreshToken[]
+  groups         Group[]         @relation(name: "members")
+  managedGroups  Group[]         @relation(name: "admin")
+  clients        Client[]
+  jobs           Job[]
+  paymentMethods PaymentMethod[]
+  payments       Payment[]
+  jobTypes       JobType[]
+  groupInvites   GroupInvite[]
+}
+
+model RefreshToken {
+  id         String      @id
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  lastUsedAt DateTime?
+  token      String      @unique
+  status     TokenStatus @default(VALID)
+  Doctor     Doctor?     @relation(fields: [doctorId], references: [id])
+  doctorId   Int?
+}
+
+model GroupInvite {
+  id        Int          @id @default(autoincrement())
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  message   String
+  status    InviteStatus @default(WAITING)
+  group     Group?       @relation(fields: [groupId], references: [id])
+  groupId   Int?
+  doctor    Doctor?      @relation(fields: [doctorId], references: [id])
+  doctorId  Int?
+}
+
+model Client {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  name      String
+  lastName  String
+  groups    Group[]
+  doctors   Doctor[]
+  jobs      Job[]
+  payments  Payment[]
+}
+
+model PaymentMethod {
+  id                 Int       @id @default(autoincrement())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  name               String
+  discountPercentage Float     @default(0)
+  feePercentage      Float     @default(0)
+  group              Group?    @relation(fields: [groupId], references: [id])
+  groupId            Int?
+  doctor             Doctor?   @relation(fields: [doctorId], references: [id])
+  doctorId           Int?
+  payments           Payment[]
+}
+
+model JobType {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String
+  value     Float
+  group     Group?   @relation(fields: [groupId], references: [id])
+  groupId   Int?
+  doctor    Doctor?  @relation(fields: [doctorId], references: [id])
+  doctorId  Int?
+  jobs      Job[]
+}
+
+model Job {
+  id                 Int       @id @default(autoincrement())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  notes              String
+  installmentsNumber Float     @default(1)
+  installmentValue   Float
+  paidInstallments   Float     @default(0)
+  jobType            JobType   @relation(fields: [jobTypeId], references: [id])
+  jobTypeId          Int
+  group              Group?    @relation(fields: [groupId], references: [id])
+  groupId            Int?
+  doctor             Doctor?   @relation(fields: [doctorId], references: [id])
+  doctorId           Int?
+  client             Client?   @relation(fields: [clientId], references: [id])
+  clientId           Int?
+  payments           Payment[]
+}
+
+model Payment {
+  id              Int           @id @default(autoincrement())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  value           Float
+  method          PaymentMethod @relation(fields: [paymentMethodId], references: [id])
+  paymentMethodId Int
+  group           Group?        @relation(fields: [groupId], references: [id])
+  groupId         Int?
+  doctor          Doctor?       @relation(fields: [doctorId], references: [id])
+  doctorId        Int?
+  client          Client?       @relation(fields: [clientId], references: [id])
+  clientId        Int?
+  job             Job?          @relation(fields: [jobId], references: [id])
+  jobId           Int?
+}

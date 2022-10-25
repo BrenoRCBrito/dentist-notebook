@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Lucas",
+    "lastName": "Monteiro",
+    "groups": {
+      "connect": { "id": 1 }
+    }
+  },
+  {
+    "name": "Vanessa",
+    "lastName": "Fernandes",
+    "doctors": {
+      "connect": [{ "id": 2 }, { "id": 4 }]
+    }
+  },
+  {
+    "name": "Daniel",
+    "lastName": "Abraão",
+    "doctors": {
+      "connect": { "id": 3 }
+    }
+  }
+]

@@ -1,0 +1,19 @@
+[
+  {
+    "name": "CREDIT",
+    "feePercentage": 10,
+    "groupId": 1,
+    "doctorId": null
+  },
+  {
+    "name": "DEBIT",
+    "groupId": 1,
+    "doctorId": null
+  },
+  {
+    "name": "CREDIT",
+    "feePercentage": 15,
+    "groupId": null,
+    "doctorId": 2
+  }
+]
